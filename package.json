@@ -1,0 +1,30 @@
+{
+  "name": "bo-portfolio-v2",
+  "version": "1.0.0",
+  "description": "Modern interactive portfolio with scroll-driven video hero",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bofrompursuit/BoPortfolioV2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bofrompursuit/BoPortfolioV2/issues"
+  },
+  "homepage": "https://github.com/bofrompursuit/BoPortfolioV2#readme",
+  "type": "module",
+  "devDependencies": {
+    "vite": "^8.3.0"
+  },
+  "dependencies": {
+    "gsap": "^3.15.0"
+  }
+}

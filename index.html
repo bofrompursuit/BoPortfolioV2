@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bo — Portfolio</title>
+  <meta name="description" content="Interactive portfolio with a scroll-driven video hero." />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div class="grain"></div>
+
+  <header class="site-header" data-header>
+    <a class="brand" href="#hero">Bo.</a>
+    <nav class="nav">
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO: fullscreen video, pinned + scrubbed while scrolling -->
+    <section id="hero" class="hero" data-hero>
+      <div class="hero-video-wrap" data-hero-video-wrap>
+        <video
+          class="hero-video"
+          data-hero-video
+          poster="/assets/poster/hero-poster.jpg"
+          muted
+          playsinline
+          preload="auto"
+        >
+          <source src="/assets/video/intro.mp4" type="video/mp4" />
+        </video>
+        <div class="hero-video-fallback" data-hero-fallback aria-hidden="true"></div>
+        <div class="hero-scrim"></div>
+      </div>
+
+      <div class="hero-content">
+        <p class="eyebrow" data-fade>Product Designer &amp; Developer</p>
+        <h1 class="hero-title" data-fade>
+          <span>I build interfaces</span>
+          <span>people remember.</span>
+        </h1>
+        <button class="mute-toggle" data-mute-toggle aria-pressed="false" aria-label="Unmute intro video">
+          <span data-mute-icon>🔇</span>
+        </button>
+      </div>
+
+      <div class="scroll-cue" data-fade>
+        <span>Scroll</span>
+        <div class="scroll-cue-line"><i></i></div>
+      </div>
+    </section>
+
+    <!-- WORK -->
+    <section id="work" class="section work">
+      <div class="section-head">
+        <h2 data-reveal>Selected Work</h2>
+        <p class="section-sub" data-reveal>A few projects worth a second look.</p>
+      </div>
+
+      <div class="project-list">
+        <article class="project-card" data-reveal>
+          <div class="project-media" style="--accent:#7c5cff"></div>
+          <div class="project-info">
+            <h3>Case Study 01</h3>
+            <p>A short description of the problem, the approach, and the outcome for this project.</p>
+            <div class="tags"><span>UX</span><span>Frontend</span><span>Design System</span></div>
+          </div>
+        </article>
+
+        <article class="project-card" data-reveal>
+          <div class="project-media" style="--accent:#ff5c8a"></div>
+          <div class="project-info">
+            <h3>Case Study 02</h3>
+            <p>A short description of the problem, the approach, and the outcome for this project.</p>
+            <div class="tags"><span>Product</span><span>React</span><span>Motion</span></div>
+          </div>
+        </article>
+
+        <article class="project-card" data-reveal>
+          <div class="project-media" style="--accent:#3ce7c1"></div>
+          <div class="project-info">
+            <h3>Case Study 03</h3>
+            <p>A short description of the problem, the approach, and the outcome for this project.</p>
+            <div class="tags"><span>Branding</span><span>Web</span><span>3D</span></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="section about">
+      <div class="about-grid">
+        <h2 data-reveal>About</h2>
+        <p data-reveal>
+          I'm Bo — a designer/developer who likes building fast, tactile
+          interfaces with a bit of motion. Replace this paragraph with your
+          real bio, background, and what you're currently focused on.
+        </p>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" class="section skills">
+      <h2 data-reveal>Toolbox</h2>
+      <ul class="skill-grid">
+        <li data-reveal>HTML / CSS / JS</li>
+        <li data-reveal>React</li>
+        <li data-reveal>Node.js</li>
+        <li data-reveal>Motion &amp; Interaction</li>
+        <li data-reveal>Design Systems</li>
+        <li data-reveal>Figma</li>
+      </ul>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section contact">
+      <h2 data-reveal>Let's talk</h2>
+      <p data-reveal>Have a project in mind? Reach out.</p>
+      <a class="contact-link" data-reveal href="mailto:hello@example.com">hello@example.com</a>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; <span data-year></span> Bo. All rights reserved.</p>
+  </footer>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
