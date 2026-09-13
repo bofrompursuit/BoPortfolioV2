@@ -102,8 +102,6 @@ export default function ConnectSection() {
     };
   }, []);
 
-  // Belt and braces: if the reader scrolls to the cards before the video has
-  // got there, reveal them anyway.
   // The stage darkens as it scrolls away, the way the hero does.
   useEffect(() => {
     if (!stageRef.current || !scrimRef.current) return undefined;
@@ -126,6 +124,8 @@ export default function ConnectSection() {
     };
   }, []);
 
+  // Belt and braces: if the reader scrolls to the cards before the video has
+  // got there, reveal them anyway.
   useEffect(() => {
     if (!cardsRef.current) return undefined;
     const trigger = ScrollTrigger.create({
