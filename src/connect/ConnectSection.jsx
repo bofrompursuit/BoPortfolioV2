@@ -17,7 +17,9 @@ const VIDEO_SRC = "/assets/video/hand-reveal.mp4";
 const NEVER_STARTED_MS = 6000;
 const TYPE_MS = 55; // per character
 
-const CTA_TEXT = "//back to home";
+// Rendered with white-space: pre-line, so each \n lands as its own centred
+// line as the characters type in.
+const CTA_TEXT = "click\nhere\nto\ngo\nback\nto\nHOME//";
 
 const PANELS = [
   {
@@ -188,8 +190,10 @@ export default function ConnectSection() {
       <VisionServices />
 
       <div className="px-[clamp(20px,5vw,56px)] pt-[clamp(40px,6vh,76px)]">
+        {/* Header only — the navbar link stays "Contact" so #connect still
+            matches what the visitor clicked. */}
         <h2 className="text-[clamp(1.8rem,4vw,2.75rem)] font-semibold tracking-tight text-white">
-          Contact
+          Stay in touch
         </h2>
         <p className="mt-3 max-w-2xl text-white/55">
           Three ways to reach me &mdash; start a project, back the work, or follow along.
@@ -241,7 +245,7 @@ export default function ConnectSection() {
             className="orb-cta"
             data-cursor-target
             onClick={backToTop}
-            aria-label={CTA_TEXT}
+            aria-label="Click here to go back to home"
           >
             <span className="orb-cta-text" aria-hidden="true">
               {typed}

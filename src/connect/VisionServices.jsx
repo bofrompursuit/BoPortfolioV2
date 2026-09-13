@@ -11,11 +11,9 @@ const FLOOR = 0.34;
 // of the pass rather than only at the exact centre.
 const RAMP = 2.6;
 
+// "Operational Vision & Mission" now lives in its own wave banner inside the
+// Work section (index.html); this panoramic block carries the rest.
 const BLOCKS = [
-  {
-    title: "Operational Vision & Mission",
-    body: "Bo is a FinTech Solutions Architect and AI Product Engineer who loves bridging high-level finance with cutting-edge tech. Let’s connect.",
-  },
   {
     title: "Technical DNA + Services",
     body: "I build automated workflows and smart AI tools that optimize budgets, eliminate operational bottlenecks, and help engineering and finance teams grow together. Feel free to ask.",

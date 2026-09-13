@@ -115,6 +115,11 @@ if (!prefersReducedMotion && heroVideoWrap) {
     .to("[data-hero] .scroll-cue", { opacity: 0, ease: "none" }, 0);
 }
 
+/* ---------- Vision banner waves: freeze the ambient drift for reduced motion ---------- */
+if (prefersReducedMotion) {
+  document.querySelector(".vision-banner-waves")?.pauseAnimations();
+}
+
 /* ---------- Mount the React islands ---------- */
 const showcaseRoot = document.getElementById("showcase-root");
 if (showcaseRoot) mountShowcase(showcaseRoot);
