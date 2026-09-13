@@ -4,6 +4,7 @@ import "./style.css";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { mountShowcase } from "./showcase/mount.jsx";
+import { mountConnect } from "./connect/mount.jsx";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -141,6 +142,9 @@ document.querySelectorAll("[data-reveal]").forEach((el) => {
   });
 });
 
-/* ---------- Mount the React showcase ---------- */
+/* ---------- Mount the React islands ---------- */
 const showcaseRoot = document.getElementById("showcase-root");
 if (showcaseRoot) mountShowcase(showcaseRoot);
+
+const connectRoot = document.getElementById("connect-root");
+if (connectRoot) mountConnect(connectRoot);
