@@ -3,13 +3,12 @@
 Drop three files in this folder and the Contact & Connect panels pick them up
 automatically — no code change:
 
-    contact.jpg      Michelangelo's David
+    contact.jpg      Artemis, Diana of Versailles
     contribute.jpg   Venus de Milo
     connect.jpg      Winged Victory of Samothrace (or any draped classical marble)
 
 Guidance: high resolution, tight crop on the head, shoulders or hands rather
-than the whole figure — that reads as cinematic and keeps a nude subject (David,
-Apollo) tasteful. Portrait orientation suits the panels best, roughly 1400x2000.
+than the whole figure — that reads as cinematic. Portrait orientation suits the panels best, roughly 1400x2000.
 Colour is fine: the panel applies grayscale, so any photograph renders
 black-and-white.
 

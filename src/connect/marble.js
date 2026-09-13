@@ -76,14 +76,16 @@ export function marbleBackdrop({ seed, keyX, keyY }) {
 
 export const STATUES = {
   contact: {
-    // Head-and-shoulders crops. David is a nude, so the candidates are bust
-    // views and the panel anchors its crop to the top of the frame.
-    statue: "Michelangelo's David",
+    // Replaces the David. Draped head to foot, so there is nothing to crop
+    // around, and the striding reach suits a panel whose job is "get in touch".
+    // With the Venus and the Nike it also makes the set three Louvre marbles
+    // rather than one Florentine and two French.
+    statue: "Artemis, Diana of Versailles",
     photoLayer:
       local("contact") +
-      commons("Michelangelo's David - Head.jpg") +
-      commons("'David' by Michelangelo Fir JBU 002.jpg") +
-      commons("David Michelangelo head.jpg"),
+      commons("Diane de Versailles Leochares.jpg") +
+      commons("Artemis with a doe, Diana of Versailles.jpg") +
+      commons("Diana of Versailles Louvre Ma589.jpg"),
     marble: marbleBackdrop({ seed: 7, keyX: 30, keyY: 20 }),
   },
   contribute: {
