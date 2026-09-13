@@ -117,7 +117,9 @@ if (!prefersReducedMotion && heroVideoWrap) {
 
 /* ---------- Vision banner waves: freeze the ambient drift for reduced motion ---------- */
 if (prefersReducedMotion) {
-  document.querySelector(".vision-banner-waves")?.pauseAnimations();
+  document
+    .querySelectorAll(".vision-banner-waves")
+    .forEach((svg) => svg.pauseAnimations());
 }
 
 /* ---------- Mount the React islands ---------- */

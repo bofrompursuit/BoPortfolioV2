@@ -5,7 +5,6 @@ import { ContactCard, ContributeCard, ConnectCard } from "./cards";
 import AccordionGallery from "./AccordionGallery";
 import CustomCursor from "./CustomCursor";
 import { STATUES } from "./marble";
-import VisionServices from "./VisionServices";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -185,10 +184,6 @@ export default function ConnectSection() {
 
   return (
     <>
-      {/* Vision and services first: it follows the Work section directly, so the
-          reader meets the positioning before the invitation to get in touch. */}
-      <VisionServices />
-
       <div className="px-[clamp(20px,5vw,56px)] pt-[clamp(40px,6vh,76px)]">
         {/* Header only — the navbar link stays "Contact" so #connect still
             matches what the visitor clicked. */}
