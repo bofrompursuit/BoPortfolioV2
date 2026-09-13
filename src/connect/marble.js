@@ -1,62 +1,105 @@
 /**
  * Museum backdrops for the accordion panels.
  *
- * Each panel layers a photograph over a procedural marble field. The photo IDs
- * are UNVERIFIED placeholders — this build has no network access to check them,
- * so swap them for real classical-statue photography before launch. The marble
- * underneath is generated from an SVG filter, so a panel whose photo 404s still
- * reads as carved stone rather than a flat colour.
+ * Photography is read from public/assets/statues/<id>.jpg. Those files ship with
+ * the repo rather than coming from a stock-photo CDN, because a remote ID cannot
+ * be verified from a build environment without network access — the previous
+ * version pointed at three unverifiable Unsplash IDs and rendered nothing.
+ *
+ * A background-image layer whose URL 404s is skipped by the browser and the next
+ * layer shows through, so the chiaroscuro field below is a real fallback that
+ * costs no JavaScript and no error handling. Add the photographs and they simply
+ * take over; see public/assets/statues/README.md.
  */
 
-// sat=-100 renders the crop black-and-white at the CDN, and the tall crop keeps
-// the close-up cinematic rather than showing the whole gallery around the piece.
-const unsplash = (id) =>
-  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&crop=entropy&w=1400&h=2000&q=85&sat=-100`;
+/**
+ * Layer 1 — photography you control. Drop files into public/assets/statues and
+ * they win over everything below; see the README there.
+ */
+const local = (id) => `url("/assets/statues/${id}.jpg"), `;
 
-/** Fractal veining, tinted by the gradient it sits on. */
-function veining(seed) {
+/**
+ * Layer 2 — Wikimedia Commons, addressed by filename rather than by an opaque
+ * CDN id. Classical sculpture there is public domain (the works are millennia
+ * old) and Special:FilePath resolves a name to the file, thumbnailed to width.
+ *
+ * These filenames are UNVERIFIED: this build environment can only reach GitHub,
+ * so no image host can be checked from here. That is why each panel lists
+ * several candidates — the browser draws the topmost layer that loads and skips
+ * every one that 404s, so a wrong name costs a failed request and nothing else.
+ */
+const commons = (file) =>
+  `url("https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(file)}?width=1400"), `;
+
+/**
+ * Marble veining plus film grain. Two turbulence passes: a low-frequency one
+ * stretched along the y axis for the veins, and a fine one for the grain that
+ * keeps the gradient from banding on large panels.
+ */
+function stone(seed) {
   const svg =
-    `<svg xmlns='http://www.w3.org/2000/svg' width='420' height='560'>` +
-    `<filter id='v'>` +
-    `<feTurbulence type='fractalNoise' baseFrequency='0.013 0.045' numOctaves='4' seed='${seed}'/>` +
-    `<feColorMatrix type='saturate' values='0'/>` +
-    `<feComponentTransfer><feFuncA type='linear' slope='0.55'/></feComponentTransfer>` +
-    `</filter>` +
-    `<rect width='100%' height='100%' filter='url(%23v)'/>` +
+    `<svg xmlns='http://www.w3.org/2000/svg' width='700' height='1000'>` +
+      `<filter id='vein'>` +
+        `<feTurbulence type='fractalNoise' baseFrequency='0.008 0.05' numOctaves='5' seed='${seed}'/>` +
+        `<feColorMatrix type='saturate' values='0'/>` +
+        `<feComponentTransfer><feFuncA type='linear' slope='0.42'/></feComponentTransfer>` +
+      `</filter>` +
+      `<filter id='grain'>` +
+        `<feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='${seed + 3}'/>` +
+        `<feColorMatrix type='saturate' values='0'/>` +
+        `<feComponentTransfer><feFuncA type='linear' slope='0.16'/></feComponentTransfer>` +
+      `</filter>` +
+      `<rect width='100%' height='100%' filter='url(%23vein)'/>` +
+      `<rect width='100%' height='100%' filter='url(%23grain)'/>` +
     `</svg>`;
   return `url("data:image/svg+xml;utf8,${svg}")`;
 }
 
-/** Stacked background-image value: veining over a lit marble gradient. */
-export function marbleBackdrop({ seed, from, mid, to }) {
+/**
+ * Chiaroscuro: a hard key light falling across stone into deep shadow, which is
+ * how sculpture is lit in a gallery and why the panels read as monochrome
+ * photography rather than a flat grey block.
+ */
+export function marbleBackdrop({ seed, keyX, keyY }) {
   return [
-    veining(seed),
-    `radial-gradient(ellipse at 30% 18%, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0) 55%)`,
-    `linear-gradient(168deg, ${from} 0%, ${mid} 46%, ${to} 100%)`,
+    stone(seed),
+    // key light
+    `radial-gradient(ellipse 60% 42% at ${keyX}% ${keyY}%, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.22) 30%, rgba(255,255,255,0) 62%)`,
+    // bounced fill on the opposite side, so the shadow keeps some detail
+    `radial-gradient(ellipse 55% 60% at ${100 - keyX}% ${100 - keyY}%, rgba(190,190,190,0.35) 0%, rgba(190,190,190,0) 70%)`,
+    // vignette
+    `radial-gradient(ellipse 85% 75% at 50% 45%, rgba(0,0,0,0) 40%, rgba(0,0,0,0.55) 100%)`,
+    // the stone itself
+    `linear-gradient(${140 + seed}deg, #8c8c8c 0%, #565656 38%, #2e2e2e 72%, #101010 100%)`,
   ].join(", ");
 }
-
-/**
- * A background-image layer for the photograph. A layer whose URL fails to load
- * is simply skipped by the browser and the marble underneath shows through, so
- * the fallback costs no JavaScript and no error handling.
- */
-const photoLayer = (id) => `url("${unsplash(id)}"), `;
 
 export const STATUES = {
   contact: {
     statue: "Michelangelo's David",
-    photoLayer: photoLayer("1568667256549-094345857637"),
-    marble: marbleBackdrop({ seed: 7, from: "#f2f2f2", mid: "#c9c9c9", to: "#7e7e7e" }),
+    photoLayer:
+      local("contact") +
+      commons("'David' by Michelangelo Fir JBU 002.jpg") +
+      commons("Michelangelo's David - 63 grijs.jpg") +
+      commons("David by Michelangelo Florence Galleria dell'Accademia.jpg"),
+    marble: marbleBackdrop({ seed: 7, keyX: 30, keyY: 20 }),
   },
   contribute: {
     statue: "Venus de Milo",
-    photoLayer: photoLayer("1608248543803-ba4f8c70ae0b"),
-    marble: marbleBackdrop({ seed: 19, from: "#f5f5f5", mid: "#cecece", to: "#848484" }),
+    photoLayer:
+      local("contribute") +
+      commons("Venus de Milo Louvre Ma399 n4.jpg") +
+      commons("Venus de Milo Louvre Ma399.jpg") +
+      commons("Aphrodite of Milos.jpg"),
+    marble: marbleBackdrop({ seed: 19, keyX: 66, keyY: 26 }),
   },
   connect: {
     statue: "Apollo Belvedere",
-    photoLayer: photoLayer("1610414897281-1e3a1f4d4b9f"),
-    marble: marbleBackdrop({ seed: 31, from: "#efefef", mid: "#c4c4c4", to: "#7a7a7a" }),
+    photoLayer:
+      local("connect") +
+      commons("Apollo of the Belvedere.jpg") +
+      commons("Belvedere Apollo Pio-Clementino Inv1015.jpg") +
+      commons("Apollo Belvedere Vatican.jpg"),
+    marble: marbleBackdrop({ seed: 31, keyX: 44, keyY: 14 }),
   },
 };

@@ -133,7 +133,7 @@ export default function AccordionGallery({ panels }) {
               aria-hidden={isActive ? undefined : "true"}
               className="relative h-full overflow-y-auto border border-white/20 bg-black/60 p-6 shadow-2xl backdrop-blur-md sm:p-8"
             >
-              <header className="mb-6">
+              <header className="mb-6 text-center">
                 <h3 className="text-xl font-semibold uppercase tracking-[0.18em] text-white drop-shadow-md sm:text-2xl">
                   {label}
                 </h3>
