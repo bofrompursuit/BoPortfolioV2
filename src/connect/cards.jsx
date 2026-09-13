@@ -132,14 +132,14 @@ export function ContactCard({ idPrefix = "cf" }) {
 
       <button
         type="submit"
-        className="w-full rounded-lg border border-cyan-300/60 bg-cyan-300/20 px-4 py-3 text-sm font-semibold text-cyan-50 transition hover:bg-cyan-300/35 hover:shadow-[0_0_24px_-4px_rgba(34,211,238,0.6)] focus:outline-none focus:ring-2 focus:ring-cyan-300/70 active:scale-[0.99]"
+        className="w-full rounded-lg border border-cyan-300/60 bg-cyan-300/20 px-4 py-3 text-sm font-semibold text-white transition hover:bg-cyan-300/35 hover:shadow-[0_0_24px_-4px_rgba(34,211,238,0.6)] focus:outline-none focus:ring-2 focus:ring-cyan-300/70 active:scale-[0.99]"
       >
         {status === "sent" ? "Draft opened ✓" : "Send inquiry"}
       </button>
 
       <p role="status" aria-live="polite" className="min-h-[1.25rem] text-xs">
         {status === "sent" && (
-          <span className="text-cyan-200">
+          <span className="text-white/70">
             Your mail app should have opened with the message ready to send.
           </span>
         )}
@@ -153,7 +153,7 @@ function Field({ id, label, error, children }) {
     <div>
       <label
         htmlFor={id}
-        className="mb-1.5 block text-[0.7rem] font-medium uppercase tracking-[0.18em] text-cyan-200"
+        className="mb-1.5 block text-[0.7rem] font-medium uppercase tracking-[0.18em] text-white/70"
       >
         {label}
       </label>
@@ -182,7 +182,7 @@ export function ContributeCard() {
 
   return (
     <div className="flex flex-col items-center gap-5 text-center">
-      <p className="text-sm leading-relaxed text-white/80">
+      <p className="text-sm leading-relaxed text-white/70">
         Donate to my SMB &amp; my future apps through Venmo
       </p>
 
@@ -204,7 +204,7 @@ export function ContributeCard() {
         href={VENMO_URL}
         target="_blank"
         rel="noopener noreferrer"
-        className="rounded-lg border border-cyan-300/40 px-4 py-2 font-mono text-sm font-semibold text-cyan-100 transition hover:bg-cyan-300/15 hover:shadow-[0_0_20px_-6px_rgba(34,211,238,0.7)] focus:outline-none focus:ring-2 focus:ring-cyan-300/70"
+        className="rounded-lg border border-cyan-300/40 px-4 py-2 font-mono text-sm font-semibold text-white transition hover:bg-cyan-300/15 hover:shadow-[0_0_20px_-6px_rgba(34,211,238,0.7)] focus:outline-none focus:ring-2 focus:ring-cyan-300/70"
       >
         @{VENMO_HANDLE}
       </a>
@@ -227,7 +227,7 @@ export function ConnectCard() {
               <span className="block text-sm font-semibold text-white">{link.label}</span>
               <span className="block truncate text-xs text-white/55">{link.handle}</span>
             </span>
-            <span className="shrink-0 text-cyan-200 transition group-hover:translate-x-0.5">
+            <span className="shrink-0 text-white/70 transition group-hover:translate-x-0.5">
               ↗
             </span>
           </a>

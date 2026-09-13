@@ -14,9 +14,11 @@ export default function ShowcaseImage({ src, gradient, alt, className = "" }) {
         <img
           src={src}
           alt={alt}
-          loading="lazy"
+          // Not lazy: the cards scroll horizontally on their own, so lazily
+          // loaded images pop in mid-marquee and read as empty boxes.
+          decoding="async"
           onError={() => setFailed(true)}
-          className={`absolute inset-0 h-full w-full object-cover ${className}`}
+          className={`absolute inset-0 block h-full w-full object-cover ${className}`}
         />
       )}
     </span>

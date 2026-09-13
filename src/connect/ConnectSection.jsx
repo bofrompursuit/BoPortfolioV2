@@ -123,7 +123,7 @@ export default function ConnectSection() {
         <h2 className="text-[clamp(1.8rem,4vw,2.75rem)] font-semibold tracking-tight text-white">
           Contact &amp; Connect
         </h2>
-        <p className="mt-3 max-w-2xl text-white/60">
+        <p className="mt-3 max-w-2xl text-white/55">
           Three ways to reach me — start a project, back the work, or follow along.
         </p>
       </div>
@@ -181,10 +181,10 @@ function HoloCard({ label, blurb, children }) {
         <span className="pointer-events-none absolute bottom-3 right-3 h-4 w-4 border-b-2 border-r-2 border-cyan-300/80" />
 
         <div className="mb-5">
-          <p className="text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-cyan-300">
+          <p className="text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-white">
             {label}
           </p>
-          <p className="mt-1 text-sm text-white/60">{blurb}</p>
+          <p className="mt-1 text-sm text-white/55">{blurb}</p>
         </div>
 
         {children}
