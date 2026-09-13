@@ -18,6 +18,27 @@ adjust it to match the actual frame. If the video can't play at all (blocked
 autoplay, missing file, a browser without H.264), the copy reveals anyway via
 a fallback timer so it is never stuck hidden.
 
+## Contact & Connect section
+
+`src/connect/` is a scroll-driven sticky sequence: a robotic hand appears,
+projects a "Keep on scrolling." holographic card that disintegrates, then the
+camera orbits and zooms to three fingertips, revealing fingerprints that carry
+the CONTACT / CONTRIBUTE / CONNECT cards. Every card is also rendered in an
+always-visible "All channels" grid below the cinematic, so nothing is trapped
+behind an animation (this is also what reduced-motion users get).
+
+**Two placeholders to fill in** (`src/connect/cards.jsx`):
+
+- `CONTACT_EMAIL` is still `hello@example.com`. The form has no backend — it
+  composes a `mailto:` from the fields. Point it at your real address, or swap
+  the submit handler for a form endpoint (Formspree, Getform, etc.).
+- `VENMO_HANDLE` / `VENMO_URL` assume `venmo.com/u/beau_moldenhauer`. The QR
+  code encodes that URL, so verify it resolves before sharing.
+
+The hand in `RoboticHand.jsx` is a stylized SVG stand-in, not the reference
+render. `FINGERTIPS` drives both the camera framing and the hotspot positions,
+so a real image can be layered into the same box using those coordinates.
+
 ## Showcase content
 
 `src/showcase/projects.js` holds the three categories and their five projects
