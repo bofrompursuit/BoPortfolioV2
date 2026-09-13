@@ -338,6 +338,12 @@ video {
   display: block;
 }
 
+/* Operational Vision & Mission: plain strip, no wave graphic, so the two
+   banners don't stack two wave backgrounds back to back. */
+.vision-banner--plain {
+  background: var(--bg);
+}
+
 .vision-banner-copy {
   position: relative;
   z-index: 1;
