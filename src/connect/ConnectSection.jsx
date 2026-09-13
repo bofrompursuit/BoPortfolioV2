@@ -43,6 +43,8 @@ const PANELS = [
 
 export default function ConnectSection() {
   const videoRef = useRef(null);
+  const stageRef = useRef(null);
+  const scrimRef = useRef(null);
   const cardsRef = useRef(null);
   const [revealed, setRevealed] = useState(false);
   const [videoFailed, setVideoFailed] = useState(false);
@@ -102,6 +104,28 @@ export default function ConnectSection() {
 
   // Belt and braces: if the reader scrolls to the cards before the video has
   // got there, reveal them anyway.
+  // The stage darkens as it scrolls away, the way the hero does.
+  useEffect(() => {
+    if (!stageRef.current || !scrimRef.current) return undefined;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
+
+    const tween = gsap.to(scrimRef.current, {
+      opacity: 0.88,
+      ease: "none",
+      scrollTrigger: {
+        trigger: stageRef.current,
+        start: "top top",
+        end: "bottom top",
+        scrub: true,
+      },
+    });
+
+    return () => {
+      tween.scrollTrigger?.kill();
+      tween.kill();
+    };
+  }, []);
+
   useEffect(() => {
     if (!cardsRef.current) return undefined;
     const trigger = ScrollTrigger.create({
@@ -135,38 +159,50 @@ export default function ConnectSection() {
         </p>
       </div>
 
-      {/* Video stage. The footage is 1280x720, so the box is locked to 16/9 and
-          capped by viewport height rather than given fixed pixel heights: the
-          whole frame stays visible — nothing crops the holographic card — with
-          no letterbox bars, from a folded foldable up to a desktop. */}
-      <div className="mt-6 px-[clamp(20px,5vw,56px)]">
+      {/* Immersive video stage: a full-viewport panel like the hero, edge to
+          edge, that darkens as it scrolls away.
+
+          object-contain, not cover. The footage is 16:9 and a phone held
+          upright is not, so filling the viewport would mean cropping the
+          holographic card off again — the exact complaint this replaced. The
+          frame is shown whole on black instead, which letterboxes on portrait
+          screens and is the deliberate trade for never cropping or stretching. */}
+      <div
+        ref={stageRef}
+        className="relative w-full overflow-hidden bg-black"
+        // Full viewport wherever the frame can actually fill it — desktop,
+        // tablet, any landscape screen. On a portrait phone a 16:9 frame shown
+        // whole can only ever occupy about a quarter of the height, so the
+        // stage shrinks to the frame plus breathing room instead of pinning to
+        // 100svh and leaving three quarters of the screen black.
+        style={{ height: "min(100svh, calc(100vw * 9 / 16 + 25svh))" }}
+      >
+        <video
+          ref={videoRef}
+          className="absolute inset-0 h-full w-full object-contain"
+          src={VIDEO_SRC}
+          autoPlay
+          muted
+          playsInline
+          loop={false}
+          preload="auto"
+          aria-hidden="true"
+        />
+
+        {/* Gradient stand-in, shown only if the video cannot play */}
+        {videoFailed && (
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,#16283a,#0a0a0c_70%)]" />
+        )}
+
+        {/* Scrubbed by scroll position, so the stage dims as it leaves */}
         <div
-          className="relative mx-auto w-full overflow-hidden rounded-2xl ring-1 ring-white/10 ring-inset"
-          style={{
-            aspectRatio: "16 / 9",
-            maxWidth: "min(100%, calc(min(72vh, 620px) * 16 / 9))",
-          }}
-        >
-          <video
-            ref={videoRef}
-            className="absolute inset-0 h-full w-full bg-[#0a0a0c] object-contain"
-            src={VIDEO_SRC}
-            autoPlay
-            muted
-            playsInline
-            loop={false}
-            preload="auto"
-            aria-hidden="true"
-          />
+          ref={scrimRef}
+          className="pointer-events-none absolute inset-0 bg-[#0a0a0c]"
+          style={{ opacity: 0 }}
+        />
 
-          {/* Gradient stand-in, shown only if the video cannot play */}
-          {videoFailed && (
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,#16283a,#0a0a0c_70%)]" />
-          )}
-
-          {/* Scrim so the section below reads as one continuous surface */}
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#0a0a0c]/45 via-transparent to-[#0a0a0c]/80" />
-        </div>
+        {/* Hands off to the section below as one continuous surface */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-[#0a0a0c]" />
       </div>
 
       {/* Positioning copy, in the same rhythm as every other section block */}

@@ -5,12 +5,17 @@ automatically — no code change:
 
     contact.jpg      Michelangelo's David
     contribute.jpg   Venus de Milo
-    connect.jpg      Apollo Belvedere (or any classical marble)
+    connect.jpg      Winged Victory of Samothrace (or any draped classical marble)
 
-Guidance: high-resolution, cinematic, black-and-white, tight crop on the face,
-shoulders or hands rather than the whole figure. Portrait orientation suits the
-panels best (roughly 1400x2000). Free sources: Unsplash, Pexels, Wikimedia
-Commons (most classical sculpture photography there is public domain).
+Guidance: high resolution, tight crop on the head, shoulders or hands rather
+than the whole figure — that reads as cinematic and keeps a nude subject (David,
+Apollo) tasteful. Portrait orientation suits the panels best, roughly 1400x2000.
+Colour is fine: the panel applies grayscale, so any photograph renders
+black-and-white.
+
+The panel anchors its crop to the TOP of the image, so put the face or the focal
+detail in the upper third. Free sources: Wikimedia Commons (classical sculpture
+photography is overwhelmingly public domain), Unsplash, Pexels.
 
 `.jpg` is what the code looks for. If you have `.png` or `.webp`, either convert
 them or edit `PHOTO` in `src/connect/marble.js`.

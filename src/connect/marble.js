@@ -76,15 +76,18 @@ export function marbleBackdrop({ seed, keyX, keyY }) {
 
 export const STATUES = {
   contact: {
+    // Head-and-shoulders crops. David is a nude, so the candidates are bust
+    // views and the panel anchors its crop to the top of the frame.
     statue: "Michelangelo's David",
     photoLayer:
       local("contact") +
+      commons("Michelangelo's David - Head.jpg") +
       commons("'David' by Michelangelo Fir JBU 002.jpg") +
-      commons("Michelangelo's David - 63 grijs.jpg") +
-      commons("David by Michelangelo Florence Galleria dell'Accademia.jpg"),
+      commons("David Michelangelo head.jpg"),
     marble: marbleBackdrop({ seed: 7, keyX: 30, keyY: 20 }),
   },
   contribute: {
+    // Draped from the hips down; nothing to crop around.
     statue: "Venus de Milo",
     photoLayer:
       local("contribute") +
@@ -94,12 +97,15 @@ export const STATUES = {
     marble: marbleBackdrop({ seed: 19, keyX: 66, keyY: 26 }),
   },
   connect: {
-    statue: "Apollo Belvedere",
+    // Replaces the Apollo Belvedere, which is a full nude. The Nike is fully
+    // draped, is marble, and sits in the same Louvre Hellenistic register as
+    // the Venus, so the three panels read as one collection.
+    statue: "Winged Victory of Samothrace",
     photoLayer:
       local("connect") +
-      commons("Apollo of the Belvedere.jpg") +
-      commons("Belvedere Apollo Pio-Clementino Inv1015.jpg") +
-      commons("Apollo Belvedere Vatican.jpg"),
+      commons("Nike of Samothrake Louvre Ma2369 n4.jpg") +
+      commons("Winged Victory of Samothrace - Louvre.jpg") +
+      commons("Nike of Samothrace.jpg"),
     marble: marbleBackdrop({ seed: 31, keyX: 44, keyY: 14 }),
   },
 };

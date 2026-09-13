@@ -78,7 +78,10 @@ export default function AccordionGallery({ panels }) {
             {/* Museum backdrop: photograph over procedural marble. */}
             <motion.div
               aria-hidden="true"
-              className="absolute inset-0 bg-cover bg-center"
+              // Anchored to the top of the frame: classical sculpture is
+              // photographed full-figure, and a centred crop on a tall panel
+              // lands on the middle of the body rather than the face.
+              className="absolute inset-0 bg-cover bg-top"
               style={{ backgroundImage: `${statue.photoLayer}${statue.marble}` }}
               animate={{
                 // The photography is black-and-white by design, so the hovered panel
@@ -102,7 +105,7 @@ export default function AccordionGallery({ panels }) {
               className={
                 isDesktop
                   ? "absolute inset-0 flex items-center justify-center bg-black/45 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
-                  : "absolute inset-x-0 top-0 flex h-[88px] items-center justify-between gap-3 bg-black/45 px-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                  : "absolute inset-x-0 top-0 flex h-[88px] items-center justify-center bg-black/45 px-12 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
               }
             >
               <span
@@ -115,8 +118,13 @@ export default function AccordionGallery({ panels }) {
               >
                 {label}
               </span>
+              {/* Positioned rather than laid out, so it cannot pull the label
+                  off centre. */}
               {!isDesktop && (
-                <span aria-hidden="true" className="shrink-0 text-2xl font-light text-white/70">
+                <span
+                  aria-hidden="true"
+                  className="absolute right-5 top-1/2 -translate-y-1/2 text-2xl font-light text-white/70"
+                >
                   +
                 </span>
               )}
