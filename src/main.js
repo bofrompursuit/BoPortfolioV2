@@ -128,20 +128,6 @@ gsap.to("[data-fade]", {
   ease: "power2.out",
 });
 
-/* ---------- Reveal-on-scroll for section content ---------- */
-document.querySelectorAll("[data-reveal]").forEach((el) => {
-  if (prefersReducedMotion) {
-    el.classList.add("is-visible");
-    return;
-  }
-
-  ScrollTrigger.create({
-    trigger: el,
-    start: "top 85%",
-    onEnter: () => el.classList.add("is-visible"),
-  });
-});
-
 /* ---------- Mount the React islands ---------- */
 const showcaseRoot = document.getElementById("showcase-root");
 if (showcaseRoot) mountShowcase(showcaseRoot);

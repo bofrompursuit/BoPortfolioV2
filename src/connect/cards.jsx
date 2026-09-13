@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import QRCode from "qrcode";
 
-// TODO(bo): replace with the address inquiries should reach. Until a real form
-// endpoint exists, submitting composes a mail draft in the visitor's client.
-export const CONTACT_EMAIL = "hello@example.com";
+// No form backend yet — submitting composes a mail draft in the visitor's client.
+export const CONTACT_EMAIL = "boudich@live.com.ph";
 
-// TODO(bo): confirm this resolves to your profile — the QR encodes it.
-export const VENMO_HANDLE = "beau_moldenhauer";
+export const VENMO_HANDLE = "Beau_Moldenhauer";
 export const VENMO_URL = `https://venmo.com/u/${VENMO_HANDLE}`;
 
 const LINKS = [
