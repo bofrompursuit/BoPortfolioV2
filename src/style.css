@@ -317,6 +317,107 @@ video {
   50% { height: 12px; }
 }
 
+/* ---------- Vision & Services: right-aligned copy over panoramic footage ---------- */
+.vision {
+  /* Two independent lifts. Scroll drives the first as the section passes, hover
+     drives the second; the copy takes whichever is higher, so a pointer can
+     force full legibility at any scroll position while a touch device still
+     reaches it on scroll alone. */
+  --scroll-lift: 0.34;
+  --hover-lift: 0;
+  --lift: max(var(--scroll-lift), var(--hover-lift));
+
+  position: relative;
+  overflow: hidden;
+  min-height: min(78svh, 640px);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  background: var(--bg);
+}
+
+.vision:hover,
+.vision:focus-within {
+  --hover-lift: 1;
+}
+
+.vision-fallback,
+.vision-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+
+.vision-fallback {
+  background-size: cover;
+  background-position: center;
+}
+
+.vision-video {
+  /* Monochrome to match the statue panels, and lit by the same lift as the copy
+     so the whole section brightens together. */
+  filter: grayscale(100%) brightness(calc(0.45 + 0.35 * var(--lift)));
+  transition: filter 0.45s ease;
+}
+
+.vision-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.82) 0%,
+    rgba(0, 0, 0, 0.6) 45%,
+    rgba(0, 0, 0, 0.25) 100%
+  );
+  opacity: calc(1.05 - 0.25 * var(--lift));
+  transition: opacity 0.45s ease;
+}
+
+.vision-copy {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: clamp(28px, 5vh, 48px);
+  width: 100%;
+  max-width: 760px;
+  text-align: right;
+  padding: clamp(56px, 9vh, 104px) max(clamp(20px, 5vw, 56px), env(safe-area-inset-right))
+    clamp(56px, 9vh, 104px) clamp(20px, 5vw, 56px);
+  opacity: var(--lift);
+  transition: opacity 0.45s ease;
+}
+
+.vision-block h3 {
+  margin: 0;
+  font-size: clamp(1.25rem, 2.6vw, 1.75rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #fff;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.65);
+}
+
+.vision-block p {
+  margin: 12px 0 0;
+  margin-left: auto;
+  max-width: 46ch;
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1.6;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.7);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vision-copy,
+  .vision-video,
+  .vision-scrim {
+    transition: none;
+  }
+}
+
 /* ---------- Custom cursor ---------- */
 /* The class is added by CustomCursor once it has confirmed a fine pointer, so a
    visitor whose JavaScript never runs keeps an ordinary cursor rather than none. */

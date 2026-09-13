@@ -111,3 +111,11 @@ export const STATUES = {
     marble: marbleBackdrop({ seed: 31, keyX: 44, keyY: 14 }),
   },
 };
+
+/**
+ * Wide marble field behind the Vision & Services copy. Shown until
+ * public/assets/video/vision-pan.mp4 exists, and still visible through the
+ * video's letterbox edges on very wide screens, so it is a backdrop rather than
+ * only a placeholder.
+ */
+export const PANORAMA = marbleBackdrop({ seed: 44, keyX: 22, keyY: 34 });

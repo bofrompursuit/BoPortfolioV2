@@ -5,6 +5,7 @@ import { ContactCard, ContributeCard, ConnectCard } from "./cards";
 import AccordionGallery from "./AccordionGallery";
 import CustomCursor from "./CustomCursor";
 import { STATUES } from "./marble";
+import VisionServices from "./VisionServices";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -150,13 +151,26 @@ export default function ConnectSection() {
 
   return (
     <>
+      {/* Vision and services first: it follows the Work section directly, so the
+          reader meets the positioning before the invitation to get in touch. */}
+      <VisionServices />
+
       <div className="px-[clamp(20px,5vw,56px)] pt-[clamp(40px,6vh,76px)]">
         <h2 className="text-[clamp(1.8rem,4vw,2.75rem)] font-semibold tracking-tight text-white">
-          Contact &amp; Connect
+          Contact
         </h2>
         <p className="mt-3 max-w-2xl text-white/55">
-          Three ways to reach me — start a project, back the work, or follow along.
+          Three ways to reach me &mdash; start a project, back the work, or follow along.
         </p>
+      </div>
+
+      {/* Accordion gallery */}
+      <div
+        ref={cardsRef}
+        style={{ opacity: 0, transform: "translateY(28px)" }}
+        className="px-[clamp(20px,5vw,56px)] pb-[clamp(40px,6vh,72px)] pt-[clamp(20px,3vh,36px)]"
+      >
+        <AccordionGallery panels={PANELS} />
       </div>
 
       {/* Immersive video stage: a full-viewport panel like the hero, edge to
@@ -203,39 +217,6 @@ export default function ConnectSection() {
 
         {/* Hands off to the section below as one continuous surface */}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-[#0a0a0c]" />
-      </div>
-
-      {/* Positioning copy, in the same rhythm as every other section block */}
-      <div className="grid gap-8 px-[clamp(20px,5vw,56px)] pt-[clamp(32px,5vh,56px)] md:grid-cols-2 md:gap-12">
-        <div>
-          <h3 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
-            Operational Vision &amp; Mission
-          </h3>
-          <p className="mt-3 max-w-prose text-white/60">
-            Bo is a FinTech Solutions Architect and AI Product Engineer who loves bridging
-            high-level finance with cutting-edge tech. Let&rsquo;s connect.
-          </p>
-        </div>
-
-        <div>
-          <h3 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
-            Technical DNA + Services
-          </h3>
-          <p className="mt-3 max-w-prose text-white/60">
-            I build automated workflows and smart AI tools that optimize budgets, eliminate
-            operational bottlenecks, and help engineering and finance teams grow together.
-            Feel free to ask.
-          </p>
-        </div>
-      </div>
-
-      {/* Accordion gallery */}
-      <div
-        ref={cardsRef}
-        style={{ opacity: 0, transform: "translateY(28px)" }}
-        className="px-[clamp(20px,5vw,56px)] pb-[clamp(48px,7vh,88px)] pt-[clamp(20px,3vh,36px)]"
-      >
-        <AccordionGallery panels={PANELS} />
       </div>
 
       <CustomCursor />
