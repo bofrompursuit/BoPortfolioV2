@@ -54,10 +54,10 @@ function backToTop() {
 export default function ConnectSection() {
   const videoRef = useRef(null);
   const stageRef = useRef(null);
-  const orbRef = useRef(null);
+  const frameRef = useRef(null);
   const cardsRef = useRef(null);
   const [revealed, setRevealed] = useState(false);
-  // Playback has reached its reveal, so the orb dims and the link takes over.
+  // Playback has reached its reveal, so the frame dims and the link takes over.
   const [settled, setSettled] = useState(false);
   const [typed, setTyped] = useState("");
   const [videoFailed, setVideoFailed] = useState(false);
@@ -90,7 +90,7 @@ export default function ConnectSection() {
 
     // Only when playback never got going — blocked autoplay, a missing file, no
     // H.264 — does the link appear without an "ended". Otherwise a visitor whose
-    // video cannot play is stuck in a sphere with no way out.
+    // video cannot play is stuck with no way out.
     const fallbackTimer = setTimeout(() => {
       if (video.paused || video.error || video.currentTime === 0) settle();
     }, NEVER_STARTED_MS);
@@ -114,23 +114,23 @@ export default function ConnectSection() {
     };
   }, []);
 
-  // The orb unfurls as the section scrolls in.
+  // The frame unfurls as the section scrolls in.
   useEffect(() => {
-    if (!orbRef.current) return undefined;
+    if (!frameRef.current) return undefined;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      gsap.set(orbRef.current, { opacity: 1, scale: 1 });
+      gsap.set(frameRef.current, { opacity: 1, scale: 1 });
       return undefined;
     }
 
     const tween = gsap.fromTo(
-      orbRef.current,
+      frameRef.current,
       { opacity: 0, scale: 0.82 },
       {
         opacity: 1,
         scale: 1,
         duration: 1.1,
         ease: "power3.out",
-        scrollTrigger: { trigger: orbRef.current, start: "top 88%", once: true },
+        scrollTrigger: { trigger: frameRef.current, start: "top 88%", once: true },
       }
     );
 
@@ -204,48 +204,39 @@ export default function ConnectSection() {
         <AccordionGallery panels={PANELS} />
       </div>
 
-      {/* Robot hand inside a sphere, stitched straight onto the cards above.
-          A circular mask has to crop a 16:9 frame, so the footage is centred
-          and the orb is sized as large as the viewport allows to keep as much
-          of the reveal in frame as possible. */}
-      <div className="orb-stage" ref={stageRef} data-settled={settled}>
-        <div className="orb" ref={orbRef} style={{ opacity: 0 }}>
-          <div className="orb-ring" aria-hidden="true" />
+      {/* Reveal footage, stitched straight onto the cards above. A square 1:1
+          crop that fills the available width, full-bleed like the hero video. */}
+      <div className="reveal-stage" ref={stageRef} data-settled={settled}>
+        <div className="reveal-frame" ref={frameRef} style={{ opacity: 0 }}>
+          {videoFailed ? (
+            <div className="reveal-fallback" aria-hidden="true" />
+          ) : (
+            <video
+              ref={videoRef}
+              className="reveal-video"
+              src={VIDEO_SRC}
+              autoPlay
+              muted
+              playsInline
+              loop={false}
+              preload="auto"
+              aria-hidden="true"
+            />
+          )}
 
-          <div className="orb-body">
-            {videoFailed ? (
-              <div className="orb-fallback" aria-hidden="true" />
-            ) : (
-              <video
-                ref={videoRef}
-                className="orb-video"
-                src={VIDEO_SRC}
-                autoPlay
-                muted
-                playsInline
-                loop={false}
-                preload="auto"
-                aria-hidden="true"
-              />
-            )}
+          <div className="reveal-dim" aria-hidden="true" />
 
-            <div className="orb-shade" aria-hidden="true" />
-            <div className="orb-dim" aria-hidden="true" />
-          </div>
-
-          {/* Inside the orb, not the stage: the stage's padding is asymmetric,
-              so centring against it put the link off the sphere's middle. */}
           <button
             type="button"
-            className="orb-cta"
+            className="reveal-cta"
             data-cursor-target
             onClick={backToTop}
             aria-label="Click here to go back to home"
           >
-            <span className="orb-cta-text" aria-hidden="true">
+            <span className="reveal-cta-text" aria-hidden="true">
               {typed}
             </span>
-            <span className="orb-cta-caret" aria-hidden="true" />
+            <span className="reveal-cta-caret" aria-hidden="true" />
           </button>
         </div>
       </div>

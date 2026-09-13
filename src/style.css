@@ -370,122 +370,53 @@ video {
   font-size: clamp(0.85rem, 1.6vw, 1rem);
 }
 
-/* ---------- Robot-hand orb ---------- */
-.orb-stage {
+/* ---------- Reveal footage: full-bleed 1:1 crop with an end-of-video CTA ---------- */
+.reveal-stage {
   position: relative;
   display: flex;
-  align-items: flex-start;
   justify-content: center;
-  overflow: hidden;
-  /* Cropped to ~3/4 of the orb's own height: the sphere sinks below this
-     boundary like a sunset dipping below the horizon, rather than floating
-     free on the page. Stitched to the cards above via the top padding. */
-  height: min(62vw, 51svh, 465px);
-  padding: clamp(16px, 3vh, 40px) clamp(20px, 5vw, 56px) 0;
-  background: radial-gradient(ellipse 70% 55% at 50% 45%, #14141a 0%, var(--bg) 70%);
+  /* Stitched to the cards above: the stage owns the gap so there is no seam
+     between the last card and the frame. */
+  padding-top: clamp(16px, 3vh, 40px);
+  background: var(--bg);
 }
 
-.orb {
+.reveal-frame {
   position: relative;
-  width: min(82vw, 68svh, 620px);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  flex-shrink: 0;
-  /* Sits the sphere in the page rather than on it. */
-  box-shadow: 0 40px 90px -30px rgba(0, 0, 0, 0.9),
-    0 0 90px -20px rgba(255, 255, 255, 0.14);
-}
-
-/* Slowly turning light around the rim: the cue that this is a sphere and not a
-   circle, without rotating the footage itself. */
-.orb-ring {
-  position: absolute;
-  inset: -2px;
-  border-radius: 50%;
-  background: conic-gradient(
-    from 0deg,
-    rgba(255, 255, 255, 0) 0deg,
-    rgba(255, 255, 255, 0.75) 55deg,
-    rgba(255, 255, 255, 0.08) 130deg,
-    rgba(255, 255, 255, 0) 210deg,
-    rgba(255, 255, 255, 0.35) 300deg,
-    rgba(255, 255, 255, 0) 360deg
-  );
-  animation: orbSpin 14s linear infinite;
-  filter: blur(0.5px);
-}
-
-@keyframes orbSpin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.orb-body {
-  position: absolute;
-  inset: 3px;
-  border-radius: 50%;
+  width: 100%;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
-  background: #05060a;
 }
 
-.orb-video,
-.orb-fallback {
+.reveal-video,
+.reveal-fallback {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  /* A circular mask has to crop a 16:9 frame; centred keeps the subject. */
   object-fit: cover;
   object-position: center center;
 }
 
-.orb-video {
-  /* Fish-eye stand-in: scaled past the circular mask so the frame bulges
-     toward the rim rather than sitting flat behind it, reading as footage
-     wrapped around a sphere. transform-only, so it stays hardware-accelerated. */
-  transform: scale(1.16);
-  transform-origin: center center;
-}
-
-.orb-fallback {
+.reveal-fallback {
   background: radial-gradient(circle at 50% 40%, #16283a, #05060a 70%);
 }
 
-/* Spherical shading: specular highlight up and left, terminator down and right,
-   plus a rim so the edge reads as curvature rather than a hard cut. */
-.orb-shade {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  pointer-events: none;
-  background: radial-gradient(
-      circle at 32% 26%,
-      rgba(255, 255, 255, 0.3) 0%,
-      rgba(255, 255, 255, 0.06) 22%,
-      rgba(255, 255, 255, 0) 45%
-    ),
-    radial-gradient(circle at 68% 78%, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0) 55%);
-  box-shadow: inset 0 0 60px 10px rgba(0, 0, 0, 0.55),
-    inset 0 2px 2px rgba(255, 255, 255, 0.22);
-}
-
 /* Ambient dim once playback reaches its reveal, so the eye goes to the link. */
-.orb-dim {
+.reveal-dim {
   position: absolute;
   inset: 0;
-  border-radius: 50%;
   pointer-events: none;
-  background: radial-gradient(circle at 50% 50%, rgba(5, 6, 10, 0.42) 0%, rgba(5, 6, 10, 0.66) 100%);
+  background: radial-gradient(circle at 50% 50%, rgba(5, 6, 10, 0.42) 0%, rgba(5, 6, 10, 0.72) 100%);
   opacity: 0;
   transition: opacity 1.1s ease;
 }
 
-.orb-stage[data-settled="true"] .orb-dim {
+.reveal-stage[data-settled="true"] .reveal-dim {
   opacity: 1;
 }
 
-.orb-cta {
+.reveal-cta {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -500,10 +431,11 @@ video {
   background: none;
   font: inherit;
   text-align: center;
-  /* Smaller than it was: the sphere carries the moment, the link only has to be
-     found. Monospaced so the characters do not reflow as they are typed in. */
+  /* Monospaced so the characters do not reflow as they are typed in. Larger
+     than the old orb link: the frame now fills the viewport width, so the
+     text needs more scale to read as centred rather than lost. */
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: clamp(0.72rem, 1.6vw, 0.9rem);
+  font-size: clamp(0.9rem, 2.4vw, 1.4rem);
   font-weight: 300;
   letter-spacing: 0.16em;
   line-height: 1;
@@ -518,7 +450,7 @@ video {
 
 /* Holographic: a cyan-to-magenta sheen drifting through white, clipped to the
    glyphs, over a soft bloom so it reads as projected light rather than ink. */
-.orb-cta-text {
+.reveal-cta-text {
   background: linear-gradient(
     100deg,
     #ffffff 0%,
@@ -532,7 +464,7 @@ video {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: orbHolo 6s linear infinite;
+  animation: revealHolo 6s linear infinite;
   filter: drop-shadow(0 0 6px rgba(160, 235, 255, 0.55))
     drop-shadow(0 0 16px rgba(255, 255, 255, 0.3));
   /* Each \n in CTA_TEXT becomes its own centred, tight-leaded line as the
@@ -542,56 +474,55 @@ video {
   line-height: 1;
 }
 
-@keyframes orbHolo {
+@keyframes revealHolo {
   to {
     background-position: 260% 0;
   }
 }
 
 /* Terminal caret, so the line reads as typed rather than faded in. */
-.orb-cta-caret {
+.reveal-cta-caret {
   width: 0.55em;
   height: 1.05em;
   background: rgba(200, 245, 255, 0.9);
   box-shadow: 0 0 8px rgba(160, 235, 255, 0.7);
-  animation: orbCaret 1s steps(1) infinite;
+  animation: revealCaret 1s steps(1) infinite;
 }
 
-@keyframes orbCaret {
+@keyframes revealCaret {
   0%, 50% { opacity: 1; }
   50.01%, 100% { opacity: 0; }
 }
 
-.orb-stage[data-settled="true"] .orb-cta {
+.reveal-stage[data-settled="true"] .reveal-cta {
   opacity: 1;
   pointer-events: auto;
 }
 
-.orb-cta:hover,
-.orb-cta:focus-visible {
+.reveal-cta:hover,
+.reveal-cta:focus-visible {
   letter-spacing: 0.22em;
   outline: none;
 }
 
-.orb-cta:focus-visible {
+.reveal-cta:focus-visible {
   box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .orb-ring,
-  .orb-cta-text,
-  .orb-cta-caret {
+  .reveal-cta-text,
+  .reveal-cta-caret {
     animation: none;
   }
 
-  .orb-dim,
-  .orb-cta {
+  .reveal-dim,
+  .reveal-cta {
     transition: none;
   }
 
   /* Without the sheen animation the clipped gradient would sit on one static
      hue, so fall back to plain white. */
-  .orb-cta-text {
+  .reveal-cta-text {
     background: none;
     color: #fff;
   }
