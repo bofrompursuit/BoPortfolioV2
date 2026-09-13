@@ -58,8 +58,13 @@ video {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: var(--header-h);
-  padding: 0 clamp(20px, 5vw, 56px);
+  /* viewport-fit=cover lets the page run under the status bar, so the bar's
+     height is added to the header rather than overlapping its contents. */
+  height: calc(var(--header-h) + env(safe-area-inset-top));
+  padding-top: env(safe-area-inset-top);
+  padding-right: max(clamp(20px, 5vw, 56px), env(safe-area-inset-right));
+  padding-bottom: 0;
+  padding-left: max(clamp(20px, 5vw, 56px), env(safe-area-inset-left));
   transition: background 0.4s ease, border-color 0.4s ease;
   border-bottom: 1px solid transparent;
 }
