@@ -135,27 +135,38 @@ export default function ConnectSection() {
         </p>
       </div>
 
-      {/* Video stage */}
-      <div className="relative mt-6 overflow-hidden">
-        <video
-          ref={videoRef}
-          className="h-[min(42vh,380px)] w-full bg-[#0a0a0c] object-contain sm:h-[min(60vh,540px)] lg:object-cover"
-          src={VIDEO_SRC}
-          autoPlay
-          muted
-          playsInline
-          loop={false}
-          preload="auto"
-          aria-hidden="true"
-        />
+      {/* Video stage. The footage is 1280x720, so the box is locked to 16/9 and
+          capped by viewport height rather than given fixed pixel heights: the
+          whole frame stays visible — nothing crops the holographic card — with
+          no letterbox bars, from a folded foldable up to a desktop. */}
+      <div className="mt-6 px-[clamp(20px,5vw,56px)]">
+        <div
+          className="relative mx-auto w-full overflow-hidden rounded-2xl ring-1 ring-white/10 ring-inset"
+          style={{
+            aspectRatio: "16 / 9",
+            maxWidth: "min(100%, calc(min(72vh, 620px) * 16 / 9))",
+          }}
+        >
+          <video
+            ref={videoRef}
+            className="absolute inset-0 h-full w-full bg-[#0a0a0c] object-contain"
+            src={VIDEO_SRC}
+            autoPlay
+            muted
+            playsInline
+            loop={false}
+            preload="auto"
+            aria-hidden="true"
+          />
 
-        {/* Gradient stand-in, shown only if the video cannot play */}
-        {videoFailed && (
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,#16283a,#0a0a0c_70%)]" />
-        )}
+          {/* Gradient stand-in, shown only if the video cannot play */}
+          {videoFailed && (
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,#16283a,#0a0a0c_70%)]" />
+          )}
 
-        {/* Scrim so the section below reads as one continuous surface */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#0a0a0c]/70 via-transparent to-[#0a0a0c]" />
+          {/* Scrim so the section below reads as one continuous surface */}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#0a0a0c]/45 via-transparent to-[#0a0a0c]/80" />
+        </div>
       </div>
 
       {/* Positioning copy, in the same rhythm as every other section block */}
