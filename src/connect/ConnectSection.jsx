@@ -8,7 +8,7 @@ import { STATUES } from "./marble";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const VIDEO_SRC = "/assets/video/hand-reveal.mp4";
+const VIDEO_SRC = "/assets/video/reveal-v2.mp4";
 
 // The link waits for the footage to finish. No fraction, no early reveal: the
 // reader watches the whole thing before being offered the way out. A video that
