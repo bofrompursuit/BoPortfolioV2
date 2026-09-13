@@ -1,9 +1,29 @@
 # Bo — Portfolio V2
 
-A modern, interactive portfolio built with plain HTML/CSS/JS, bundled with
-[Vite](https://vitejs.dev/) and animated with [GSAP](https://gsap.com/) +
-ScrollTrigger. The hero is a fullscreen video that scrubs, dims, and fades
-its overlay copy as you scroll, then hands off into the rest of the page.
+A modern, interactive portfolio bundled with [Vite](https://vitejs.dev/).
+The page shell is plain HTML/CSS animated with [GSAP](https://gsap.com/) +
+ScrollTrigger; the Featured Systems & Code showcase is a React island built
+with Tailwind CSS and Framer Motion.
+
+The hero is a fullscreen video that scrubs and dims as you scroll. The hero
+copy stays hidden until the intro video reaches its name card, then reveals
+on a slow stagger.
+
+## Tuning the hero reveal
+
+`HERO_REVEAL_AT_SECONDS` in `src/main.js` is the timestamp (in seconds) at
+which the video shows "Bo Moldenhauer — Product Engineer". The copy reveals
+at that moment. The current value is a best guess against a 10.01s cut —
+adjust it to match the actual frame. If the video can't play at all (blocked
+autoplay, missing file, a browser without H.264), the copy reveals anyway via
+a fallback timer so it is never stuck hidden.
+
+## Showcase content
+
+`src/showcase/projects.js` holds the three categories and their five projects
+each. **The card descriptions are inferred from project names and should be
+replaced with real copy.** Each item also carries a `gradient` that renders
+behind its image, so a failed or blocked image still looks intentional.
 
 ## Adding the intro video
 
@@ -40,12 +60,17 @@ npm run preview   # serve the production build locally
 ## Project structure
 
 ```
-index.html              Markup for the whole single-page site
-src/style.css            Styles (dark theme, responsive, reduced-motion aware)
-src/main.js              GSAP ScrollTrigger-driven hero + reveal animations
-public/assets/video/     Hero video lives here (intro.mp4)
-public/assets/poster/    Optional poster frame for the hero video
-vite.config.js           Build config (relative asset base, outputs to dist/)
+index.html                        Markup for the page shell
+src/style.css                     Dark theme, responsive, reduced-motion aware
+src/tailwind.css                  Tailwind entry (loaded before style.css)
+src/main.js                       Hero video, reveal timing, GSAP, React mount
+src/showcase/projects.js          Category + project data (edit copy here)
+src/showcase/FeaturedShowcase.jsx Section header + the three category rows
+src/showcase/CategoryRow.jsx      Auto-scrolling marquee of project cards
+src/showcase/FullscreenShowcase.jsx  Full-screen slider + glass thumbnail nav
+src/showcase/ShowcaseImage.jsx    Image with a gradient fallback layer
+public/assets/video/              Hero video lives here (intro.mp4)
+vite.config.js                    Build config (React, Tailwind, outputs dist/)
 ```
 
 ## Deployment

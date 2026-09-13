@@ -4,8 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bo — Portfolio</title>
-  <meta name="description" content="Interactive portfolio with a scroll-driven video hero." />
-  <link rel="stylesheet" href="/src/style.css" />
+  <meta name="description" content="Bo Moldenhauer — product engineer. Interactive portfolio with a scroll-driven video hero." />
 </head>
 <body>
   <div class="grain"></div>
@@ -39,57 +38,25 @@
       </div>
 
       <div class="hero-content">
-        <p class="eyebrow" data-fade>Product Designer &amp; Developer</p>
-        <h1 class="hero-title" data-fade>
-          <span>I build interfaces</span>
-          <span>people remember.</span>
+        <p class="eyebrow" data-hero-reveal>Product Designer &amp; Developer</p>
+        <h1 class="hero-title">
+          <span data-hero-reveal>I build interfaces</span>
+          <span data-hero-reveal>people remember.</span>
         </h1>
-        <button class="mute-toggle" data-mute-toggle aria-pressed="false" aria-label="Unmute intro video">
+        <button class="mute-toggle" data-fade data-mute-toggle aria-pressed="false" aria-label="Unmute intro video">
           <span data-mute-icon>🔇</span>
         </button>
       </div>
 
-      <div class="scroll-cue" data-fade>
+      <div class="scroll-cue" data-hero-reveal>
         <span>Scroll</span>
         <div class="scroll-cue-line"><i></i></div>
       </div>
     </section>
 
-    <!-- WORK -->
-    <section id="work" class="section work">
-      <div class="section-head">
-        <h2 data-reveal>Selected Work</h2>
-        <p class="section-sub" data-reveal>A few projects worth a second look.</p>
-      </div>
-
-      <div class="project-list">
-        <article class="project-card" data-reveal>
-          <div class="project-media" style="--accent:#7c5cff"></div>
-          <div class="project-info">
-            <h3>Case Study 01</h3>
-            <p>A short description of the problem, the approach, and the outcome for this project.</p>
-            <div class="tags"><span>UX</span><span>Frontend</span><span>Design System</span></div>
-          </div>
-        </article>
-
-        <article class="project-card" data-reveal>
-          <div class="project-media" style="--accent:#ff5c8a"></div>
-          <div class="project-info">
-            <h3>Case Study 02</h3>
-            <p>A short description of the problem, the approach, and the outcome for this project.</p>
-            <div class="tags"><span>Product</span><span>React</span><span>Motion</span></div>
-          </div>
-        </article>
-
-        <article class="project-card" data-reveal>
-          <div class="project-media" style="--accent:#3ce7c1"></div>
-          <div class="project-info">
-            <h3>Case Study 03</h3>
-            <p>A short description of the problem, the approach, and the outcome for this project.</p>
-            <div class="tags"><span>Branding</span><span>Web</span><span>3D</span></div>
-          </div>
-        </article>
-      </div>
+    <!-- WORK: React + Framer Motion showcase (src/showcase) -->
+    <section id="work" class="section work section--flush">
+      <div id="showcase-root"></div>
     </section>
 
     <!-- ABOUT -->

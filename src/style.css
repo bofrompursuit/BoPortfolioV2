@@ -31,8 +31,11 @@ video {
   display: block;
 }
 
-a {
-  color: inherit;
+/* Layered so Tailwind utilities (e.g. text-black on the showcase CTA) still win. */
+@layer base {
+  a {
+    color: inherit;
+  }
 }
 
 .grain {
@@ -235,72 +238,15 @@ a {
   padding: clamp(72px, 12vh, 140px) clamp(20px, 5vw, 56px);
 }
 
-.section-head h2,
-.section > h2 {
+.section h2 {
   font-size: clamp(1.8rem, 4vw, 2.75rem);
   letter-spacing: -0.02em;
   margin: 0 0 12px;
 }
 
-.section-sub {
-  color: var(--muted);
-  margin: 0 0 48px;
-  max-width: 520px;
-}
-
-/* Work */
-.project-list {
-  display: grid;
-  gap: 24px;
-}
-
-.project-card {
-  display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-  gap: 32px;
-  align-items: center;
-  padding: 28px;
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  background: var(--surface);
-}
-
-.project-media {
-  aspect-ratio: 16 / 10;
-  border-radius: 14px;
-  background: linear-gradient(135deg, var(--accent), transparent 70%),
-    #17171b;
-}
-
-.project-info h3 {
-  margin: 0 0 10px;
-  font-size: 1.4rem;
-}
-
-.project-info p {
-  color: var(--muted);
-  margin: 0 0 16px;
-  max-width: 46ch;
-}
-
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.tags span {
-  font-size: 0.75rem;
-  padding: 6px 12px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  color: var(--muted);
-}
-
-@media (max-width: 720px) {
-  .project-card {
-    grid-template-columns: 1fr;
-  }
+/* The React showcase brings its own spacing. */
+.section--flush {
+  padding: 0;
 }
 
 /* About */
@@ -389,13 +335,20 @@ a {
   transform: translateY(0);
 }
 
+/* Hero copy stays hidden until the intro video reaches its name card. */
+[data-hero-reveal] {
+  opacity: 0;
+  transform: translateY(22px);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
 
   [data-fade],
-  [data-reveal] {
+  [data-reveal],
+  [data-hero-reveal] {
     opacity: 1;
     transform: none;
     transition: none;

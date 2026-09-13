@@ -1,7 +1,17 @@
+import "./tailwind.css";
+import "./style.css";
+
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { mountShowcase } from "./showcase/mount.jsx";
 
 gsap.registerPlugin(ScrollTrigger);
+
+// Seconds into intro.mp4 at which the name card lands — tune to match the cut.
+const HERO_REVEAL_AT_SECONDS = 7.2;
+// If the video never starts (blocked autoplay, missing file, no codec support),
+// the hero copy still has to appear.
+const HERO_REVEAL_FALLBACK_MS = 3000;
 
 const prefersReducedMotion = window.matchMedia(
   "(prefers-reduced-motion: reduce)"
@@ -18,6 +28,22 @@ ScrollTrigger.create({
   },
 });
 
+/* ---------- Hero copy: slow reveal once the video shows the name card ---------- */
+let heroRevealed = false;
+
+function revealHeroCopy() {
+  if (heroRevealed) return;
+  heroRevealed = true;
+
+  gsap.to("[data-hero-reveal]", {
+    opacity: 1,
+    y: 0,
+    duration: 1.6,
+    stagger: 0.45,
+    ease: "power2.out",
+  });
+}
+
 /* ---------- Hero video: play/pause, mute toggle, fallback ---------- */
 const video = document.querySelector("[data-hero-video]");
 const fallback = document.querySelector("[data-hero-fallback]");
@@ -27,7 +53,10 @@ const heroSection = document.querySelector("[data-hero]");
 const heroVideoWrap = document.querySelector("[data-hero-video-wrap]");
 
 if (video) {
-  const showFallback = () => fallback.classList.add("is-visible");
+  const showFallback = () => {
+    fallback.classList.add("is-visible");
+    revealHeroCopy();
+  };
 
   video.addEventListener("error", showFallback);
   // The <source> may 404 before this script runs (or the error event can be
@@ -40,8 +69,17 @@ if (video) {
   checkForMissingSource();
   setTimeout(checkForMissingSource, 1500);
 
+  video.addEventListener("timeupdate", () => {
+    if (video.currentTime >= HERO_REVEAL_AT_SECONDS) revealHeroCopy();
+  });
+  video.addEventListener("ended", revealHeroCopy);
+
+  setTimeout(() => {
+    if (video.paused || video.error || video.currentTime === 0) revealHeroCopy();
+  }, HERO_REVEAL_FALLBACK_MS);
+
   video.play().catch(() => {
-    // Autoplay can be blocked; the poster/fallback still reads fine.
+    // Autoplay can be blocked; the fallback timer still reveals the copy.
   });
 
   muteToggle?.addEventListener("click", () => {
@@ -60,6 +98,8 @@ if (video) {
     onEnterBack: () => video.play().catch(() => {}),
     onLeaveBack: () => video.pause(),
   });
+} else {
+  revealHeroCopy();
 }
 
 /* ---------- Scroll-driven hero transition ---------- */
@@ -77,7 +117,7 @@ if (!prefersReducedMotion && heroVideoWrap) {
     .to("[data-hero] .scroll-cue", { opacity: 0, ease: "none" }, 0);
 }
 
-/* ---------- Fade-in for hero intro copy ---------- */
+/* ---------- Fade-in for controls that shouldn't wait on the video ---------- */
 gsap.to("[data-fade]", {
   opacity: 1,
   y: 0,
@@ -88,7 +128,7 @@ gsap.to("[data-fade]", {
 });
 
 /* ---------- Reveal-on-scroll for section content ---------- */
-document.querySelectorAll("[data-reveal]").forEach((el, i) => {
+document.querySelectorAll("[data-reveal]").forEach((el) => {
   if (prefersReducedMotion) {
     el.classList.add("is-visible");
     return;
@@ -100,3 +140,7 @@ document.querySelectorAll("[data-reveal]").forEach((el, i) => {
     onEnter: () => el.classList.add("is-visible"),
   });
 });
+
+/* ---------- Mount the React showcase ---------- */
+const showcaseRoot = document.getElementById("showcase-root");
+if (showcaseRoot) mountShowcase(showcaseRoot);
