@@ -61,24 +61,31 @@ export default function CategoryRow({ category, onOpen }) {
               whileTap={{ scale: 0.985 }}
               transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
               aria-label={`Open ${item.title} in the ${category.title} showcase`}
-              className="group w-[280px] shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] text-left sm:w-[320px]"
+              className="group relative w-[280px] shrink-0 overflow-hidden rounded-2xl text-left ring-1 ring-white/10 ring-inset sm:w-[320px]"
             >
-              <span className="relative block aspect-[16/10] overflow-hidden">
+              {/* Full-bleed media: no padding, no panel, nothing to letterbox. */}
+              <span className="relative block aspect-[4/5] w-full overflow-hidden">
                 <ShowcaseImage
                   src={item.image}
                   gradient={item.gradient}
                   alt={item.title}
                   className="transition-transform duration-700 group-hover:scale-105"
                 />
-              </span>
 
-              <span className="block p-5">
-                <span className="block text-base font-medium text-white">{item.title}</span>
-                <span className="mt-2 block text-sm leading-relaxed text-white/55">
-                  {item.detail}
-                </span>
-                <span className="mt-4 block truncate text-xs text-white/35">
-                  {new URL(item.url).host}
+                {/* Scrim: keeps white copy legible over any photograph. The midpoint
+                    sits at 65% so the dark end actually covers the text band below. */}
+                <span className="pointer-events-none absolute inset-0 block bg-gradient-to-t from-black/85 via-black/40 via-65% to-transparent" />
+
+                <span className="absolute bottom-0 left-0 block w-full p-4">
+                  <span className="block text-base font-semibold text-white drop-shadow-md">
+                    {item.title}
+                  </span>
+                  <span className="mt-1.5 block text-sm leading-relaxed text-white/85 drop-shadow-md">
+                    {item.detail}
+                  </span>
+                  <span className="mt-2.5 block truncate text-xs text-white/65 drop-shadow-md">
+                    {new URL(item.url).host}
+                  </span>
                 </span>
               </span>
             </motion.button>
