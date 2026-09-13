@@ -174,17 +174,11 @@ function HoloCard({ label, blurb, children }) {
       className="relative rounded-2xl bg-gradient-to-b from-cyan-300/60 via-cyan-400/15 to-fuchsia-400/35 p-px shadow-[0_0_50px_-18px_rgba(34,211,238,0.75)]"
     >
       <div className="relative h-full overflow-hidden rounded-2xl bg-[#05080c] p-6">
-        {/* corner brackets */}
-        <span className="pointer-events-none absolute left-3 top-3 h-4 w-4 border-l-2 border-t-2 border-cyan-300/80" />
-        <span className="pointer-events-none absolute right-3 top-3 h-4 w-4 border-r-2 border-t-2 border-cyan-300/80" />
-        <span className="pointer-events-none absolute bottom-3 left-3 h-4 w-4 border-b-2 border-l-2 border-cyan-300/80" />
-        <span className="pointer-events-none absolute bottom-3 right-3 h-4 w-4 border-b-2 border-r-2 border-cyan-300/80" />
-
-        <div className="mb-5">
-          <p className="text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-white">
+        <div className="mb-6 text-center">
+          <p className="text-xl font-bold uppercase tracking-[0.16em] text-white sm:text-2xl">
             {label}
           </p>
-          <p className="mt-1 text-sm text-white/55">{blurb}</p>
+          <p className="mt-2 text-sm text-white/55">{blurb}</p>
         </div>
 
         {children}
