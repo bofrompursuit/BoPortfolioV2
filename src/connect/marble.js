@@ -8,8 +8,10 @@
  * reads as carved stone rather than a flat colour.
  */
 
+// sat=-100 renders the crop black-and-white at the CDN, and the tall crop keeps
+// the close-up cinematic rather than showing the whole gallery around the piece.
 const unsplash = (id) =>
-  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=1600&q=80`;
+  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&crop=entropy&w=1400&h=2000&q=85&sat=-100`;
 
 /** Fractal veining, tinted by the gradient it sits on. */
 function veining(seed) {
@@ -29,7 +31,7 @@ function veining(seed) {
 export function marbleBackdrop({ seed, from, mid, to }) {
   return [
     veining(seed),
-    `radial-gradient(ellipse at 30% 18%, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 55%)`,
+    `radial-gradient(ellipse at 30% 18%, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0) 55%)`,
     `linear-gradient(168deg, ${from} 0%, ${mid} 46%, ${to} 100%)`,
   ].join(", ");
 }
@@ -45,16 +47,16 @@ export const STATUES = {
   contact: {
     statue: "Michelangelo's David",
     photoLayer: photoLayer("1568667256549-094345857637"),
-    marble: marbleBackdrop({ seed: 7, from: "#f4f2ee", mid: "#cfcac1", to: "#8b857d" }),
+    marble: marbleBackdrop({ seed: 7, from: "#f2f2f2", mid: "#c9c9c9", to: "#7e7e7e" }),
   },
   contribute: {
     statue: "Venus de Milo",
     photoLayer: photoLayer("1608248543803-ba4f8c70ae0b"),
-    marble: marbleBackdrop({ seed: 19, from: "#f6f3ef", mid: "#d4cec4", to: "#8f8880" }),
+    marble: marbleBackdrop({ seed: 19, from: "#f5f5f5", mid: "#cecece", to: "#848484" }),
   },
   connect: {
     statue: "Apollo Belvedere",
     photoLayer: photoLayer("1610414897281-1e3a1f4d4b9f"),
-    marble: marbleBackdrop({ seed: 31, from: "#f2f0ed", mid: "#cbc6bd", to: "#867f77" }),
+    marble: marbleBackdrop({ seed: 31, from: "#efefef", mid: "#c4c4c4", to: "#7a7a7a" }),
   },
 };

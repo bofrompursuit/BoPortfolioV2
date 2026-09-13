@@ -81,7 +81,11 @@ export default function AccordionGallery({ panels }) {
               className="absolute inset-0 bg-cover bg-center"
               style={{ backgroundImage: `${statue.photoLayer}${statue.marble}` }}
               animate={{
-                filter: isActive ? "grayscale(0%) brightness(1)" : "grayscale(100%) brightness(0.8)",
+                // The photography is black-and-white by design, so the hovered panel
+              // lifts rather than colourises: dim and flat becomes lit and crisp.
+              filter: isActive
+                ? "grayscale(100%) brightness(1.12) contrast(1.08)"
+                : "grayscale(100%) brightness(0.8)",
               }}
               transition={reduce ? { duration: 0 } : TINT}
             />
@@ -102,7 +106,7 @@ export default function AccordionGallery({ panels }) {
               }
             >
               <span
-                className="font-serif text-lg font-semibold uppercase tracking-[0.32em] text-white drop-shadow-md sm:text-xl"
+                className="text-sm font-semibold uppercase tracking-[0.32em] text-white drop-shadow-md sm:text-base"
                 style={
                   isDesktop
                     ? { writingMode: "vertical-rl", transform: "rotate(180deg)" }
@@ -130,10 +134,10 @@ export default function AccordionGallery({ panels }) {
               className="relative h-full overflow-y-auto border border-white/20 bg-black/60 p-6 shadow-2xl backdrop-blur-md sm:p-8"
             >
               <header className="mb-6">
-                <h3 className="font-serif text-2xl font-bold uppercase tracking-[0.18em] text-white drop-shadow-md sm:text-3xl">
+                <h3 className="text-xl font-semibold uppercase tracking-[0.18em] text-white drop-shadow-md sm:text-2xl">
                   {label}
                 </h3>
-                <p className="mt-2 font-serif text-base text-white/80">{blurb}</p>
+                <p className="mt-2 text-sm text-white/60">{blurb}</p>
               </header>
 
               <div className="mx-auto w-full max-w-md">

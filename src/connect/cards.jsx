@@ -155,7 +155,7 @@ function Field({ id, label, error, children }) {
     <div>
       <label
         htmlFor={id}
-        className="mb-1.5 block font-serif text-[0.72rem] font-semibold uppercase tracking-[0.2em] text-white/80"
+        className="mb-1.5 block text-[0.7rem] font-medium uppercase tracking-[0.18em] text-white/70"
       >
         {label}
       </label>
@@ -203,7 +203,7 @@ export function ContributeCard() {
 
   return (
     <div className="flex flex-col items-center gap-5 text-center">
-      <p className="font-serif text-base leading-relaxed text-white/85">
+      <p className="text-sm leading-relaxed text-white/70">
         Donate to my SMB &amp; my future apps through Venmo
       </p>
 
@@ -232,7 +232,7 @@ export function ContributeCard() {
         whileHover={{ scale: 1.03 }}
         whileTap={{ scale: 0.98 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-white/30 px-5 py-3 font-mono text-sm font-semibold text-white transition-colors hover:border-white/70 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+        className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-white/30 px-5 py-3 text-sm font-semibold tracking-wide text-white transition-colors hover:border-white/70 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
       >
         <span>@{VENMO_HANDLE}</span>
         <span aria-hidden="true" className="text-white/60">
@@ -273,7 +273,7 @@ export function ConnectCard() {
             className="group flex items-center justify-between gap-3 rounded-lg border border-white/25 bg-black/50 px-4 py-4 transition-colors hover:border-white/70 hover:bg-white/10 hover:shadow-[0_0_26px_-8px_rgba(255,255,255,0.6)] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
           >
             <span className="min-w-0">
-              <span className="block font-serif text-base font-semibold text-white">
+              <span className="block text-sm font-semibold text-white">
                 {link.label}
               </span>
               <span className="block truncate text-xs text-white/60">{link.handle}</span>

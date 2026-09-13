@@ -158,6 +158,30 @@ export default function ConnectSection() {
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#0a0a0c]/70 via-transparent to-[#0a0a0c]" />
       </div>
 
+      {/* Positioning copy, in the same rhythm as every other section block */}
+      <div className="grid gap-8 px-[clamp(20px,5vw,56px)] pt-[clamp(32px,5vh,56px)] md:grid-cols-2 md:gap-12">
+        <div>
+          <h3 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
+            Operational Vision &amp; Mission
+          </h3>
+          <p className="mt-3 max-w-prose text-white/60">
+            Bo is a FinTech Solutions Architect and AI Product Engineer who loves bridging
+            high-level finance with cutting-edge tech. Let&rsquo;s connect.
+          </p>
+        </div>
+
+        <div>
+          <h3 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
+            Technical DNA + Services
+          </h3>
+          <p className="mt-3 max-w-prose text-white/60">
+            I build automated workflows and smart AI tools that optimize budgets, eliminate
+            operational bottlenecks, and help engineering and finance teams grow together.
+            Feel free to ask.
+          </p>
+        </div>
+      </div>
+
       {/* Accordion gallery */}
       <div
         ref={cardsRef}
