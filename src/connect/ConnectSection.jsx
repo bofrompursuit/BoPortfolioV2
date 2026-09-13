@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ContactCard, ContributeCard, ConnectCard } from "./cards";
+import AccordionGallery from "./AccordionGallery";
+import CustomCursor from "./CustomCursor";
+import { STATUES } from "./marble";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -14,23 +17,26 @@ const REVEAL_AT_FRACTION = 0.72;
 // missing file or a browser without H.264 all fall back to this.
 const REVEAL_FALLBACK_MS = 4000;
 
-const CARDS = [
+const PANELS = [
   {
     id: "contact",
     label: "Contact",
     blurb: "Start a conversation.",
+    statue: STATUES.contact,
     Card: ContactCard,
   },
   {
     id: "contribute",
     label: "Contribute",
     blurb: "Back the work.",
+    statue: STATUES.contribute,
     Card: ContributeCard,
   },
   {
     id: "connect",
     label: "Connect",
     blurb: "Find me elsewhere.",
+    statue: STATUES.connect,
     Card: ConnectCard,
   },
 ];
@@ -109,13 +115,10 @@ export default function ConnectSection() {
   useEffect(() => {
     if (!revealed || !cardsRef.current) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const panels = cardsRef.current.querySelectorAll("[data-holo-card]");
-
-    gsap.to(panels, {
+    gsap.to(cardsRef.current, {
       opacity: 1,
       y: 0,
       duration: reduce ? 0 : 0.9,
-      stagger: reduce ? 0 : 0.14,
       ease: "power3.out",
       overwrite: true,
     });
@@ -155,38 +158,17 @@ export default function ConnectSection() {
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#0a0a0c]/70 via-transparent to-[#0a0a0c]" />
       </div>
 
-      {/* Holographic action cards */}
+      {/* Accordion gallery */}
       <div
         ref={cardsRef}
-        className="grid gap-5 px-[clamp(20px,5vw,56px)] pb-[clamp(48px,7vh,88px)] pt-[clamp(20px,3vh,36px)] sm:gap-6 md:grid-cols-3"
+        style={{ opacity: 0, transform: "translateY(28px)" }}
+        className="px-[clamp(20px,5vw,56px)] pb-[clamp(48px,7vh,88px)] pt-[clamp(20px,3vh,36px)]"
       >
-        {CARDS.map(({ id, label, blurb, Card }) => (
-          <HoloCard key={id} label={label} blurb={blurb}>
-            <Card idPrefix={`connect-${id}`} />
-          </HoloCard>
-        ))}
+        <AccordionGallery panels={PANELS} />
       </div>
+
+      <CustomCursor />
+
     </>
-  );
-}
-
-function HoloCard({ label, blurb, children }) {
-  return (
-    <div
-      data-holo-card
-      style={{ opacity: 0, transform: "translateY(28px)" }}
-      className="relative rounded-2xl bg-gradient-to-b from-white/70 via-white/20 to-white/45 p-px shadow-[0_0_55px_-18px_rgba(255,255,255,0.65)]"
-    >
-      <div className="relative h-full overflow-hidden rounded-2xl bg-[#05080c] p-6">
-        <div className="mb-6 text-center">
-          <p className="text-xl font-bold uppercase tracking-[0.16em] text-white sm:text-2xl">
-            {label}
-          </p>
-          <p className="mt-2 text-sm text-white/55">{blurb}</p>
-        </div>
-
-        {children}
-      </div>
-    </div>
   );
 }

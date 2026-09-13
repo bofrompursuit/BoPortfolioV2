@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 import QRCode from "qrcode";
 
 // No form backend yet — submitting composes a mail draft in the visitor's client.
@@ -132,6 +133,7 @@ export function ContactCard({ idPrefix = "cf" }) {
 
       <button
         type="submit"
+        data-cursor-target
         className="w-full rounded-lg border border-white/40 bg-white/10 px-4 py-3 text-sm font-semibold text-white transition hover:border-white/70 hover:bg-white/20 hover:shadow-[0_0_26px_-4px_rgba(255,255,255,0.55)] focus:outline-none focus:ring-2 focus:ring-white/70 active:scale-[0.99]"
       >
         {status === "sent" ? "Draft opened ✓" : "Send inquiry"}
@@ -153,7 +155,7 @@ function Field({ id, label, error, children }) {
     <div>
       <label
         htmlFor={id}
-        className="mb-1.5 block text-[0.7rem] font-medium uppercase tracking-[0.18em] text-white/70"
+        className="mb-1.5 block font-serif text-[0.72rem] font-semibold uppercase tracking-[0.2em] text-white/80"
       >
         {label}
       </label>
@@ -169,6 +171,8 @@ function Field({ id, label, error, children }) {
 
 export function ContributeCard() {
   const [qr, setQr] = useState(null);
+  const [copied, setCopied] = useState(false);
+  const timer = useRef(null);
 
   useEffect(() => {
     QRCode.toDataURL(VENMO_URL, {
@@ -180,13 +184,34 @@ export function ContributeCard() {
       .catch(() => setQr(null));
   }, []);
 
+  useEffect(() => () => clearTimeout(timer.current), []);
+
+  const copy = async () => {
+    const handle = `@${VENMO_HANDLE}`;
+    try {
+      // Absent over plain HTTP and in older browsers, so never assume it exists.
+      if (!navigator.clipboard?.writeText) throw new Error("no clipboard");
+      await navigator.clipboard.writeText(handle);
+      setCopied(true);
+      clearTimeout(timer.current);
+      timer.current = setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Fall back to handing the visitor the handle selected, ready to copy.
+      window.prompt("Copy the Venmo handle:", handle);
+    }
+  };
+
   return (
     <div className="flex flex-col items-center gap-5 text-center">
-      <p className="text-sm leading-relaxed text-white/70">
+      <p className="font-serif text-base leading-relaxed text-white/85">
         Donate to my SMB &amp; my future apps through Venmo
       </p>
 
-      <div className="rounded-xl border border-white/30 bg-black/70 p-3 shadow-[0_0_32px_-8px_rgba(255,255,255,0.5)]">
+      <motion.div
+        whileHover={{ scale: 1.04 }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        className="rounded-xl border border-white/30 bg-black/70 p-3 shadow-[0_0_32px_-8px_rgba(255,255,255,0.5)]"
+      >
         {qr ? (
           <img
             src={qr}
@@ -198,15 +223,35 @@ export function ContributeCard() {
             QR unavailable — use the handle below
           </div>
         )}
-      </div>
+      </motion.div>
+
+      <motion.button
+        type="button"
+        onClick={copy}
+        data-cursor-target
+        whileHover={{ scale: 1.03 }}
+        whileTap={{ scale: 0.98 }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-white/30 px-5 py-3 font-mono text-sm font-semibold text-white transition-colors hover:border-white/70 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+      >
+        <span>@{VENMO_HANDLE}</span>
+        <span aria-hidden="true" className="text-white/60">
+          {copied ? "✓" : "⧉"}
+        </span>
+      </motion.button>
+
+      <p role="status" aria-live="polite" className="min-h-[1.1rem] text-xs text-white/70">
+        {copied ? "Handle copied to your clipboard." : ""}
+      </p>
 
       <a
         href={VENMO_URL}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex min-h-[44px] items-center rounded-lg border border-white/30 px-5 py-3 font-mono text-sm font-semibold text-white transition hover:border-white/70 hover:bg-white/10 hover:shadow-[0_0_22px_-6px_rgba(255,255,255,0.6)] focus:outline-none focus:ring-2 focus:ring-white/70"
+        data-cursor-target
+        className="inline-flex min-h-[44px] items-center px-3 text-xs uppercase tracking-[0.18em] text-white/60 underline-offset-4 transition hover:text-white hover:underline"
       >
-        @{VENMO_HANDLE}
+        Open Venmo ↗
       </a>
     </div>
   );
@@ -217,20 +262,26 @@ export function ConnectCard() {
     <ul className="space-y-3">
       {LINKS.map((link) => (
         <li key={link.url}>
-          <a
+          <motion.a
             href={link.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex items-center justify-between gap-3 rounded-lg border border-white/20 bg-black/50 px-4 py-4 transition hover:border-white/70 hover:bg-white/10 hover:shadow-[0_0_26px_-8px_rgba(255,255,255,0.6)] focus:outline-none focus:ring-2 focus:ring-white/70"
+            data-cursor-target
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.985 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="group flex items-center justify-between gap-3 rounded-lg border border-white/25 bg-black/50 px-4 py-4 transition-colors hover:border-white/70 hover:bg-white/10 hover:shadow-[0_0_26px_-8px_rgba(255,255,255,0.6)] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
           >
             <span className="min-w-0">
-              <span className="block text-sm font-semibold text-white">{link.label}</span>
-              <span className="block truncate text-xs text-white/55">{link.handle}</span>
+              <span className="block font-serif text-base font-semibold text-white">
+                {link.label}
+              </span>
+              <span className="block truncate text-xs text-white/60">{link.handle}</span>
             </span>
             <span className="shrink-0 text-white/70 transition group-hover:translate-x-0.5">
               ↗
             </span>
-          </a>
+          </motion.a>
         </li>
       ))}
     </ul>

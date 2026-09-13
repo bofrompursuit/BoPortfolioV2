@@ -309,6 +309,21 @@ video {
   50% { height: 12px; }
 }
 
+/* ---------- Custom cursor ---------- */
+/* The class is added by CustomCursor once it has confirmed a fine pointer, so a
+   visitor whose JavaScript never runs keeps an ordinary cursor rather than none. */
+.has-custom-cursor,
+.has-custom-cursor * {
+  cursor: none;
+}
+
+/* Text entry still needs a caret the visitor can aim. */
+.has-custom-cursor input,
+.has-custom-cursor textarea,
+.has-custom-cursor [contenteditable="true"] {
+  cursor: text;
+}
+
 /* Hero copy stays hidden until the intro video reaches its name card. */
 [data-hero-reveal] {
   opacity: 0;
