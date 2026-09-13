@@ -27,7 +27,7 @@ const LINKS = [
 
 const fieldBase =
   "w-full rounded-lg border bg-black/60 px-3.5 py-2.5 text-sm text-white transition " +
-  "placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/60";
+  "placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/60";
 
 function validate(values) {
   const errors = {};
@@ -77,7 +77,7 @@ export function ContactCard({ idPrefix = "cf" }) {
   };
 
   const fieldClass = (key) =>
-    `${fieldBase} ${errors[key] ? "border-rose-400/70" : "border-cyan-300/30 hover:border-cyan-300/50"}`;
+    `${fieldBase} ${errors[key] ? "border-rose-400/70" : "border-white/25 hover:border-white/45"}`;
 
   return (
     <form onSubmit={onSubmit} noValidate className="space-y-4">
@@ -132,7 +132,7 @@ export function ContactCard({ idPrefix = "cf" }) {
 
       <button
         type="submit"
-        className="w-full rounded-lg border border-cyan-300/60 bg-cyan-300/20 px-4 py-3 text-sm font-semibold text-white transition hover:bg-cyan-300/35 hover:shadow-[0_0_24px_-4px_rgba(34,211,238,0.6)] focus:outline-none focus:ring-2 focus:ring-cyan-300/70 active:scale-[0.99]"
+        className="w-full rounded-lg border border-white/40 bg-white/10 px-4 py-3 text-sm font-semibold text-white transition hover:border-white/70 hover:bg-white/20 hover:shadow-[0_0_26px_-4px_rgba(255,255,255,0.55)] focus:outline-none focus:ring-2 focus:ring-white/70 active:scale-[0.99]"
       >
         {status === "sent" ? "Draft opened ✓" : "Send inquiry"}
       </button>
@@ -174,7 +174,7 @@ export function ContributeCard() {
     QRCode.toDataURL(VENMO_URL, {
       margin: 1,
       width: 400,
-      color: { dark: "#e8fbff", light: "#00000000" },
+      color: { dark: "#ffffff", light: "#00000000" },
     })
       .then(setQr)
       .catch(() => setQr(null));
@@ -186,7 +186,7 @@ export function ContributeCard() {
         Donate to my SMB &amp; my future apps through Venmo
       </p>
 
-      <div className="rounded-xl border border-cyan-300/40 bg-black/70 p-3 shadow-[0_0_30px_-8px_rgba(34,211,238,0.55)]">
+      <div className="rounded-xl border border-white/30 bg-black/70 p-3 shadow-[0_0_32px_-8px_rgba(255,255,255,0.5)]">
         {qr ? (
           <img
             src={qr}
@@ -204,7 +204,7 @@ export function ContributeCard() {
         href={VENMO_URL}
         target="_blank"
         rel="noopener noreferrer"
-        className="rounded-lg border border-cyan-300/40 px-4 py-2 font-mono text-sm font-semibold text-white transition hover:bg-cyan-300/15 hover:shadow-[0_0_20px_-6px_rgba(34,211,238,0.7)] focus:outline-none focus:ring-2 focus:ring-cyan-300/70"
+        className="inline-flex min-h-[44px] items-center rounded-lg border border-white/30 px-5 py-3 font-mono text-sm font-semibold text-white transition hover:border-white/70 hover:bg-white/10 hover:shadow-[0_0_22px_-6px_rgba(255,255,255,0.6)] focus:outline-none focus:ring-2 focus:ring-white/70"
       >
         @{VENMO_HANDLE}
       </a>
@@ -221,7 +221,7 @@ export function ConnectCard() {
             href={link.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex items-center justify-between gap-3 rounded-lg border border-cyan-300/25 bg-black/50 px-4 py-3.5 transition hover:border-cyan-300/70 hover:bg-cyan-300/10 hover:shadow-[0_0_24px_-8px_rgba(34,211,238,0.7)] focus:outline-none focus:ring-2 focus:ring-cyan-300/70"
+            className="group flex items-center justify-between gap-3 rounded-lg border border-white/20 bg-black/50 px-4 py-4 transition hover:border-white/70 hover:bg-white/10 hover:shadow-[0_0_26px_-8px_rgba(255,255,255,0.6)] focus:outline-none focus:ring-2 focus:ring-white/70"
           >
             <span className="min-w-0">
               <span className="block text-sm font-semibold text-white">{link.label}</span>

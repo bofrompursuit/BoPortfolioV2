@@ -49,9 +49,6 @@
           <span data-hero-reveal>I build interfaces</span>
           <span data-hero-reveal>people remember.</span>
         </h1>
-        <button class="mute-toggle" data-fade data-mute-toggle aria-pressed="false" aria-label="Unmute intro video">
-          <span data-mute-icon>🔇</span>
-        </button>
       </div>
 
       <div class="scroll-cue" data-hero-reveal>
@@ -73,6 +70,17 @@
 
   <footer class="site-footer">
     <p>&copy; <span data-year></span> Bo. All rights reserved.</p>
+
+    <button
+      class="music-toggle"
+      data-music-toggle
+      type="button"
+      aria-pressed="false"
+      aria-label="Play ambient background music"
+    >
+      <span class="music-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span data-music-label>Ambient off</span>
+    </button>
   </footer>
 
   <script type="module" src="/src/main.js"></script>

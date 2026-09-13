@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { mountShowcase } from "./showcase/mount.jsx";
 import { mountConnect } from "./connect/mount.jsx";
+import { createFooterMusic } from "./footerMusic.js";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -48,12 +49,14 @@ function revealHeroCopy() {
 /* ---------- Hero video: play/pause, mute toggle, fallback ---------- */
 const video = document.querySelector("[data-hero-video]");
 const fallback = document.querySelector("[data-hero-fallback]");
-const muteToggle = document.querySelector("[data-mute-toggle]");
-const muteIcon = document.querySelector("[data-mute-icon]");
 const heroSection = document.querySelector("[data-hero]");
 const heroVideoWrap = document.querySelector("[data-hero-video-wrap]");
 
 if (video) {
+  // The hero video is decorative; its audio track must never play.
+  video.muted = true;
+  video.volume = 0;
+
   const showFallback = () => {
     fallback.classList.add("is-visible");
     revealHeroCopy();
@@ -81,12 +84,6 @@ if (video) {
 
   video.play().catch(() => {
     // Autoplay can be blocked; the fallback timer still reveals the copy.
-  });
-
-  muteToggle?.addEventListener("click", () => {
-    video.muted = !video.muted;
-    muteToggle.setAttribute("aria-pressed", String(!video.muted));
-    muteIcon.textContent = video.muted ? "🔇" : "🔊";
   });
 
   // Pause the video once the hero scrolls out of view to save resources.
@@ -118,19 +115,27 @@ if (!prefersReducedMotion && heroVideoWrap) {
     .to("[data-hero] .scroll-cue", { opacity: 0, ease: "none" }, 0);
 }
 
-/* ---------- Fade-in for controls that shouldn't wait on the video ---------- */
-gsap.to("[data-fade]", {
-  opacity: 1,
-  y: 0,
-  duration: 1,
-  stagger: 0.12,
-  delay: 0.3,
-  ease: "power2.out",
-});
-
 /* ---------- Mount the React islands ---------- */
 const showcaseRoot = document.getElementById("showcase-root");
 if (showcaseRoot) mountShowcase(showcaseRoot);
 
 const connectRoot = document.getElementById("connect-root");
 if (connectRoot) mountConnect(connectRoot);
+
+/* ---------- Footer ambient music (synthesised, starts paused) ---------- */
+const musicToggle = document.querySelector("[data-music-toggle]");
+if (musicToggle) {
+  const music = createFooterMusic();
+  const label = musicToggle.querySelector("[data-music-label]");
+
+  musicToggle.addEventListener("click", async () => {
+    const nowPlaying = await music.toggle();
+    musicToggle.classList.toggle("is-playing", nowPlaying);
+    musicToggle.setAttribute("aria-pressed", String(nowPlaying));
+    musicToggle.setAttribute(
+      "aria-label",
+      nowPlaying ? "Mute ambient background music" : "Play ambient background music"
+    );
+    if (label) label.textContent = nowPlaying ? "Ambient on" : "Ambient off";
+  });
+}

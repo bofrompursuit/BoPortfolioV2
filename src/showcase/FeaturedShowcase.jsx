@@ -10,7 +10,7 @@ export default function FeaturedShowcase() {
 
   return (
     <>
-      <div className="px-[clamp(20px,5vw,56px)] pt-[clamp(72px,12vh,140px)]">
+      <div className="px-[clamp(20px,5vw,56px)] pt-[clamp(40px,6vh,76px)]">
         <h2 className="text-[clamp(1.8rem,4vw,2.75rem)] font-semibold tracking-tight text-white">
           Featured Systems &amp; Code
         </h2>
@@ -20,7 +20,7 @@ export default function FeaturedShowcase() {
         </p>
       </div>
 
-      <div className="pb-[clamp(48px,8vh,96px)]">
+      <div className="pb-[clamp(24px,4vh,48px)]">
         {categories.map((category) => (
           <CategoryRow
             key={category.id}

@@ -39,7 +39,7 @@ export default function CategoryRow({ category, onOpen }) {
   const cards = [...category.items, ...category.items];
 
   return (
-    <div className="py-10">
+    <div className="py-6 sm:py-8">
       <div className="px-[clamp(20px,5vw,56px)]">
         <h3 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
           {category.title}
@@ -48,7 +48,7 @@ export default function CategoryRow({ category, onOpen }) {
       </div>
 
       <div
-        className="mt-6 overflow-hidden"
+        className="mt-4 overflow-hidden sm:mt-5"
         onMouseEnter={() => (paused.current = true)}
         onMouseLeave={() => (paused.current = false)}
       >

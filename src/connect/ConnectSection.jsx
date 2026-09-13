@@ -46,6 +46,10 @@ export default function ConnectSection() {
     const video = videoRef.current;
     if (!video) return undefined;
 
+    // Decorative footage: its audio track must never play.
+    video.muted = true;
+    video.volume = 0;
+
     const reveal = () => setRevealed(true);
     const fail = () => {
       setVideoFailed(true);
@@ -119,7 +123,7 @@ export default function ConnectSection() {
 
   return (
     <>
-      <div className="px-[clamp(20px,5vw,56px)] pt-[clamp(72px,12vh,140px)]">
+      <div className="px-[clamp(20px,5vw,56px)] pt-[clamp(40px,6vh,76px)]">
         <h2 className="text-[clamp(1.8rem,4vw,2.75rem)] font-semibold tracking-tight text-white">
           Contact &amp; Connect
         </h2>
@@ -129,10 +133,10 @@ export default function ConnectSection() {
       </div>
 
       {/* Video stage */}
-      <div className="relative mt-10 overflow-hidden">
+      <div className="relative mt-6 overflow-hidden">
         <video
           ref={videoRef}
-          className="h-[min(46vh,420px)] w-full object-cover sm:h-[min(70vh,620px)]"
+          className="h-[min(42vh,380px)] w-full bg-[#0a0a0c] object-contain sm:h-[min(60vh,540px)] lg:object-cover"
           src={VIDEO_SRC}
           autoPlay
           muted
@@ -154,7 +158,7 @@ export default function ConnectSection() {
       {/* Holographic action cards */}
       <div
         ref={cardsRef}
-        className="grid gap-6 px-[clamp(20px,5vw,56px)] pb-[clamp(72px,12vh,140px)] pt-[clamp(24px,5vh,56px)] md:grid-cols-3"
+        className="grid gap-5 px-[clamp(20px,5vw,56px)] pb-[clamp(48px,7vh,88px)] pt-[clamp(20px,3vh,36px)] sm:gap-6 md:grid-cols-3"
       >
         {CARDS.map(({ id, label, blurb, Card }) => (
           <HoloCard key={id} label={label} blurb={blurb}>
@@ -171,7 +175,7 @@ function HoloCard({ label, blurb, children }) {
     <div
       data-holo-card
       style={{ opacity: 0, transform: "translateY(28px)" }}
-      className="relative rounded-2xl bg-gradient-to-b from-cyan-300/60 via-cyan-400/15 to-fuchsia-400/35 p-px shadow-[0_0_50px_-18px_rgba(34,211,238,0.75)]"
+      className="relative rounded-2xl bg-gradient-to-b from-white/70 via-white/20 to-white/45 p-px shadow-[0_0_55px_-18px_rgba(255,255,255,0.65)]"
     >
       <div className="relative h-full overflow-hidden rounded-2xl bg-[#05080c] p-6">
         <div className="mb-6 text-center">
