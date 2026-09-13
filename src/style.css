@@ -527,22 +527,68 @@ video {
   top: 50%;
   transform: translate(-50%, -50%);
   z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
   appearance: none;
   border: 0;
   background: none;
   font: inherit;
-  font-size: clamp(1rem, 3.2vw, 1.6rem);
+  /* Smaller than it was: the sphere carries the moment, the link only has to be
+     found. Monospaced so the characters do not reflow as they are typed in. */
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: clamp(0.72rem, 1.6vw, 0.9rem);
   font-weight: 300;
-  letter-spacing: 0.14em;
-  color: rgba(255, 255, 255, 0.92);
-  text-shadow: 0 2px 22px rgba(0, 0, 0, 0.8);
+  letter-spacing: 0.16em;
   cursor: pointer;
-  padding: 14px 22px;
+  padding: 12px 18px;
   min-height: 44px;
   border-radius: 999px;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 1.1s ease, letter-spacing 0.4s ease, color 0.3s ease;
+  transition: opacity 0.5s ease, letter-spacing 0.4s ease;
+}
+
+/* Holographic: a cyan-to-magenta sheen drifting through white, clipped to the
+   glyphs, over a soft bloom so it reads as projected light rather than ink. */
+.orb-cta-text {
+  background: linear-gradient(
+    100deg,
+    #ffffff 0%,
+    #9ff4ff 22%,
+    #ffffff 44%,
+    #e6b8ff 66%,
+    #ffffff 88%,
+    #9ff4ff 100%
+  );
+  background-size: 260% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: orbHolo 6s linear infinite;
+  filter: drop-shadow(0 0 6px rgba(160, 235, 255, 0.55))
+    drop-shadow(0 0 16px rgba(255, 255, 255, 0.3));
+  white-space: pre;
+}
+
+@keyframes orbHolo {
+  to {
+    background-position: 260% 0;
+  }
+}
+
+/* Terminal caret, so the line reads as typed rather than faded in. */
+.orb-cta-caret {
+  width: 0.55em;
+  height: 1.05em;
+  background: rgba(200, 245, 255, 0.9);
+  box-shadow: 0 0 8px rgba(160, 235, 255, 0.7);
+  animation: orbCaret 1s steps(1) infinite;
+}
+
+@keyframes orbCaret {
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
 }
 
 .orb-stage[data-settled="true"] .orb-cta {
@@ -552,8 +598,7 @@ video {
 
 .orb-cta:hover,
 .orb-cta:focus-visible {
-  color: #fff;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.22em;
   outline: none;
 }
 
@@ -562,13 +607,22 @@ video {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .orb-ring {
+  .orb-ring,
+  .orb-cta-text,
+  .orb-cta-caret {
     animation: none;
   }
 
   .orb-dim,
   .orb-cta {
     transition: none;
+  }
+
+  /* Without the sheen animation the clipped gradient would sit on one static
+     hue, so fall back to plain white. */
+  .orb-cta-text {
+    background: none;
+    color: #fff;
   }
 }
 

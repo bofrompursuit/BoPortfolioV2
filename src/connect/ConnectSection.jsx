@@ -11,12 +11,13 @@ gsap.registerPlugin(ScrollTrigger);
 
 const VIDEO_SRC = "/assets/video/hand-reveal.mp4";
 
-// The cards are revealed once the video reaches this fraction of its duration,
-// so the reveal lands with the render rather than waiting for the last frame.
-const REVEAL_AT_FRACTION = 0.72;
-// The cards must never depend on playback succeeding: blocked autoplay, a
-// missing file or a browser without H.264 all fall back to this.
-const REVEAL_FALLBACK_MS = 4000;
+// The link waits for the footage to finish. No fraction, no early reveal: the
+// reader watches the whole thing before being offered the way out. A video that
+// never starts is the one exception, guarded below.
+const NEVER_STARTED_MS = 6000;
+const TYPE_MS = 55; // per character
+
+const CTA_TEXT = "//back to home";
 
 const PANELS = [
   {
@@ -57,6 +58,7 @@ export default function ConnectSection() {
   const [revealed, setRevealed] = useState(false);
   // Playback has reached its reveal, so the orb dims and the link takes over.
   const [settled, setSettled] = useState(false);
+  const [typed, setTyped] = useState("");
   const [videoFailed, setVideoFailed] = useState(false);
 
   // Playback: start when the stage scrolls into view, pause when it leaves.
@@ -83,15 +85,14 @@ export default function ConnectSection() {
     checkSource();
     const sourceTimer = setTimeout(checkSource, 1500);
 
-    const onTime = () => {
-      if (video.duration && video.currentTime >= video.duration * REVEAL_AT_FRACTION) settle();
-    };
-    video.addEventListener("timeupdate", onTime);
     video.addEventListener("ended", settle);
 
-    // The link must never depend on playback: blocked autoplay, a missing file
-    // or a browser without H.264 all still have to reach the end state.
-    const fallbackTimer = setTimeout(settle, REVEAL_FALLBACK_MS);
+    // Only when playback never got going — blocked autoplay, a missing file, no
+    // H.264 — does the link appear without an "ended". Otherwise a visitor whose
+    // video cannot play is stuck in a sphere with no way out.
+    const fallbackTimer = setTimeout(() => {
+      if (video.paused || video.error || video.currentTime === 0) settle();
+    }, NEVER_STARTED_MS);
 
     const trigger = ScrollTrigger.create({
       trigger: video,
@@ -108,7 +109,6 @@ export default function ConnectSection() {
       clearTimeout(fallbackTimer);
       trigger.kill();
       video.removeEventListener("error", fail);
-      video.removeEventListener("timeupdate", onTime);
       video.removeEventListener("ended", settle);
     };
   }, []);
@@ -150,6 +150,24 @@ export default function ConnectSection() {
     });
     return () => trigger.kill();
   }, []);
+
+  // Types the link in once the footage has finished.
+  useEffect(() => {
+    if (!settled) return undefined;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setTyped(CTA_TEXT);
+      return undefined;
+    }
+
+    let i = 0;
+    const id = setInterval(() => {
+      i += 1;
+      setTyped(CTA_TEXT.slice(0, i));
+      if (i >= CTA_TEXT.length) clearInterval(id);
+    }, TYPE_MS);
+
+    return () => clearInterval(id);
+  }, [settled]);
 
   useEffect(() => {
     if (!revealed || !cardsRef.current) return;
@@ -218,8 +236,17 @@ export default function ConnectSection() {
 
           {/* Inside the orb, not the stage: the stage's padding is asymmetric,
               so centring against it put the link off the sphere's middle. */}
-          <button type="button" className="orb-cta" data-cursor-target onClick={backToTop}>
-            //back to home
+          <button
+            type="button"
+            className="orb-cta"
+            data-cursor-target
+            onClick={backToTop}
+            aria-label={CTA_TEXT}
+          >
+            <span className="orb-cta-text" aria-hidden="true">
+              {typed}
+            </span>
+            <span className="orb-cta-caret" aria-hidden="true" />
           </button>
         </div>
       </div>
