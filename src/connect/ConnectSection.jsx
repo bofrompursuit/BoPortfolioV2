@@ -179,8 +179,8 @@ export default function ConnectSection() {
           Stay in touch
         </h2>
         <p className="mt-3 max-w-2xl text-white/55">
-          I lead with problem solving then architect solutions wrapped with cutting-edge
-          tech. Feel free to ask.
+          I lead with problem-solving to architect solutions powered by cutting-edge
+          technology. Reach out anytime with questions.
         </p>
       </div>
 
@@ -257,10 +257,6 @@ export default function ConnectSection() {
               <span>{musicPlaying ? "Ambient on" : "Ambient off"}</span>
             </button>
 
-            <p className="reveal-copyright">
-              &copy; {new Date().getFullYear()} Bo Moldenhauer. All rights reserved.
-            </p>
-
             {/* Required by the CC BY 4.0 license on the ambient track. */}
             <p className="reveal-audio-credit">
               Music: &ldquo;
@@ -272,6 +268,9 @@ export default function ConnectSection() {
                 CC BY 4.0
               </a>
             </p>
+
+            {/* Last in the stack — the very bottom of the footer. */}
+            <p className="reveal-copyright">&copy; Bo Moldenhauer. All rights reserved.</p>
           </div>
         </div>
       </div>
