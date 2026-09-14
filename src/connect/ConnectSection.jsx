@@ -219,12 +219,6 @@ export default function ConnectSection() {
               behind the overlay text so it stays legible over bright footage. */}
           <div className="reveal-vignette" aria-hidden="true" />
 
-          <p className="reveal-tagline">
-            Intelligent tech.
-            <br />
-            Serious impact.
-          </p>
-
           <div className="reveal-overlay">
             <button
               type="button"
@@ -241,6 +235,14 @@ export default function ConnectSection() {
                 {CTA_LABEL_SUFFIX}
               </span>
             </button>
+
+            {/* Matches .hero-title's font-size/weight/line-height/letter-spacing
+                so it reads as a second hero statement, right under the link. */}
+            <p className="reveal-tagline">
+              Intelligent tech.
+              <br />
+              Serious impact.
+            </p>
 
             <audio ref={audioRef} src={AMBIENT_AUDIO_SRC} loop preload="none" />
             <button
