@@ -98,19 +98,21 @@ export default function FullscreenShowcase({ category, startIndex = 0, onClose }
 
       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/70" />
 
-      {/* Header: category, centered */}
-      <div className="absolute inset-x-0 top-0 p-5 text-center sm:p-8">
-        <p className="mx-auto text-[0.7rem] uppercase tracking-[0.2em] text-white/60">
-          {category.title}
-        </p>
-        <p className="mx-auto mt-1 text-sm text-white/45">{category.subtitle}</p>
-      </div>
-
-      {/* Active project details, above the centered thumbnail strip */}
+      {/* Category title/subtitle + active project details, above the centered
+          thumbnail strip. The category header sits in the lower-middle of the
+          screen, directly above the project name, rather than pinned to the
+          very top. */}
       <div
         className="absolute inset-x-0 z-10 px-5 text-center sm:px-8"
         style={{ top: `calc(50% - ${thumbHeight * 1.4}px)`, transform: "translateY(-100%)" }}
       >
+        <div className="mx-auto mb-2 sm:mb-3">
+          <p className="mx-auto text-[0.7rem] uppercase tracking-[0.2em] text-white/60">
+            {category.title}
+          </p>
+          <p className="mx-auto mt-1 text-sm text-white/45">{category.subtitle}</p>
+        </div>
+
         <AnimatePresence mode="wait">
           <motion.div
             key={active.url}
