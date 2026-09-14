@@ -400,6 +400,28 @@ video {
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
 }
 
+/* Required attribution for the CC BY 4.0 ambient track — small, but a real,
+   readable credit rather than a hidden tooltip. */
+.reveal-audio-credit {
+  margin: 0;
+  max-width: 32ch;
+  color: var(--muted);
+  font-size: 0.68rem;
+  line-height: 1.4;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.reveal-audio-credit a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.reveal-audio-credit a:hover,
+.reveal-audio-credit a:focus-visible {
+  color: var(--fg);
+}
+
 .reveal-cta {
   display: inline-flex;
   align-items: baseline;

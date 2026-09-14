@@ -9,11 +9,12 @@ import { STATUES } from "./marble";
 gsap.registerPlugin(ScrollTrigger);
 
 const VIDEO_SRC = "/assets/video/orb.mp4";
-// Synthesised offline (see scripts used to generate it) into a WAV whose
-// oscillators complete a whole number of cycles across the 16s loop, so it
-// tiles with zero click at the seam — no external track, no licensing to
-// track down.
-const AMBIENT_AUDIO_SRC = "/assets/audio/ambient-synth-loop.wav";
+// "Inspired" by Kevin MacLeod (incompetech.com), licensed under Creative
+// Commons Attribution 4.0 — attribution is rendered in the footer overlay
+// below, required by the license.
+const AMBIENT_AUDIO_SRC = "/assets/audio/inspired-kevin-macleod.mp3";
+const AMBIENT_AUDIO_CREDIT_URL = "https://incompetech.filmmusic.io/song/3918-inspired/";
+const CC_BY_4_URL = "https://creativecommons.org/licenses/by/4.0/";
 
 // Split so the blinking caret can sit right after "//" and before the
 // closing bracket, rather than at the very end of the whole label.
@@ -258,6 +259,18 @@ export default function ConnectSection() {
 
             <p className="reveal-copyright">
               &copy; {new Date().getFullYear()} Bo Moldenhauer. All rights reserved.
+            </p>
+
+            {/* Required by the CC BY 4.0 license on the ambient track. */}
+            <p className="reveal-audio-credit">
+              Music: &ldquo;
+              <a href={AMBIENT_AUDIO_CREDIT_URL} target="_blank" rel="noopener noreferrer">
+                Inspired
+              </a>
+              &rdquo; by Kevin MacLeod (incompetech.com), licensed under{" "}
+              <a href={CC_BY_4_URL} target="_blank" rel="noopener noreferrer">
+                CC BY 4.0
+              </a>
             </p>
           </div>
         </div>
