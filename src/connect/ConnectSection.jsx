@@ -219,12 +219,6 @@ export default function ConnectSection() {
               behind the overlay text so it stays legible over bright footage. */}
           <div className="reveal-vignette" aria-hidden="true" />
 
-          <p className="reveal-tagline">
-            Intelligent tech.
-            <br />
-            Serious impact.
-          </p>
-
           <div className="reveal-overlay">
             <button
               type="button"
