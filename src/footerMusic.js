@@ -1,29 +1,31 @@
 /**
- * Ambient footer music, synthesised in the browser with the Web Audio API.
+ * Upbeat disco-synth loop, synthesised in the browser with the Web Audio API.
  *
- * No audio file ships with the site: the pad is generated from oscillators, so
- * it is royalty-free by construction, loops forever without a seam, and costs
- * nothing to download. It starts paused — audio may only begin from a user
- * gesture, and unrequested music is rude.
+ * No audio file ships with the site: everything here is generated from
+ * oscillators, so it is royalty-free by construction, loops forever without a
+ * seam, and costs nothing to download. It starts paused — audio may only
+ * begin from a user gesture, and unrequested music is rude.
  */
 
-// Soft jazzy pad, looping. Semitone offsets from the root of each chord.
+const BPM = 124;
+const BEAT = 60 / BPM;
+
+// Bright, optimistic I-V-vi-IV progression, one bar (4 beats) per chord.
 const PROGRESSION = [
-  { root: 174.61, voicing: [0, 4, 7, 11] }, // Fmaj7
-  { root: 146.83, voicing: [0, 3, 7, 10] }, // Dm7
-  { root: 196.0, voicing: [0, 3, 7, 10] }, // Gm7
-  { root: 130.81, voicing: [0, 4, 7, 10] }, // C7
+  { root: 130.81, voicing: [0, 4, 7, 9] }, // C6
+  { root: 196.0, voicing: [0, 4, 7, 14] }, // Gadd9
+  { root: 110.0, voicing: [0, 3, 7, 10] }, // Am7
+  { root: 174.61, voicing: [0, 4, 7, 9] }, // F6
 ];
 
-const CHORD_SECONDS = 7;
-const MASTER_GAIN = 0.07; // deliberately low — this sits under the page
+const MASTER_GAIN = 0.09;
 const semitone = (hz, steps) => hz * 2 ** (steps / 12);
 
 export function createFooterMusic() {
   let ctx = null;
   let master = null;
-  let timer = null;
-  let chordIndex = 0;
+  let beatTimer = null;
+  let beatIndex = 0;
   let playing = false;
 
   function buildGraph() {
@@ -34,51 +36,71 @@ export function createFooterMusic() {
     master = ctx.createGain();
     master.gain.value = 0;
 
-    // Rolls the top off the oscillators so the pad is warm rather than buzzy.
+    // Bright but not harsh: rolls off just above the synth stabs' top end.
     const tone = ctx.createBiquadFilter();
     tone.type = "lowpass";
-    tone.frequency.value = 900;
-    tone.Q.value = 0.4;
-
-    // Very slow breathing movement.
-    const lfo = ctx.createOscillator();
-    const lfoGain = ctx.createGain();
-    lfo.frequency.value = 0.06;
-    lfoGain.gain.value = 0.022;
-    lfo.connect(lfoGain).connect(master.gain);
-    lfo.start();
+    tone.frequency.value = 2200;
+    tone.Q.value = 0.5;
 
     master.connect(tone).connect(ctx.destination);
     return true;
   }
 
-  function playChord() {
-    const { root, voicing } = PROGRESSION[chordIndex % PROGRESSION.length];
-    chordIndex += 1;
-
+  // A bright chord stab, held for the whole bar.
+  function playChordPad(root, voicing) {
     const now = ctx.currentTime;
-    const attack = 2.2;
-    const release = 2.6;
+    const bar = BEAT * 4;
+    const attack = 0.05;
+    const release = 0.5;
 
     voicing.forEach((step, i) => {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
 
-      osc.type = i === 0 ? "sine" : "triangle";
-      // Slight detune per voice keeps the chord from sounding synthetic.
-      osc.frequency.value = semitone(root, step) * (i === 0 ? 1 : 2);
-      osc.detune.value = (i - 1.5) * 5;
+      osc.type = i === 0 ? "sawtooth" : "triangle";
+      osc.frequency.value = semitone(root, step) * 2;
+      // Slight detune per voice keeps the stab from sounding synthetic.
+      osc.detune.value = (i - voicing.length / 2) * 4;
 
-      const peak = 0.26 / voicing.length;
+      const peak = 0.16 / voicing.length;
       gain.gain.setValueAtTime(0.0001, now);
       gain.gain.exponentialRampToValueAtTime(peak, now + attack);
-      gain.gain.setValueAtTime(peak, now + CHORD_SECONDS - release);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + CHORD_SECONDS + 0.4);
+      gain.gain.setValueAtTime(peak, now + bar - release);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + bar + 0.2);
 
       osc.connect(gain).connect(master);
       osc.start(now);
-      osc.stop(now + CHORD_SECONDS + 0.6);
+      osc.stop(now + bar + 0.3);
     });
+  }
+
+  // Four-on-the-floor bass pluck, one per beat — the disco pulse under the pad.
+  function playBassPulse(root) {
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = "square";
+    osc.frequency.value = root / 2;
+
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(0.22, now + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
+
+    osc.connect(gain).connect(master);
+    osc.start(now);
+    osc.stop(now + 0.25);
+  }
+
+  function playBeat() {
+    const chordPosition = Math.floor(beatIndex / 4) % PROGRESSION.length;
+    const { root, voicing } = PROGRESSION[chordPosition];
+    const beatInBar = beatIndex % 4;
+
+    if (beatInBar === 0) playChordPad(root, voicing);
+    playBassPulse(root);
+
+    beatIndex += 1;
   }
 
   async function play() {
@@ -91,22 +113,23 @@ export function createFooterMusic() {
     playing = true;
     master.gain.cancelScheduledValues(ctx.currentTime);
     master.gain.setValueAtTime(Math.max(master.gain.value, 0.0001), ctx.currentTime);
-    master.gain.exponentialRampToValueAtTime(MASTER_GAIN, ctx.currentTime + 2);
+    master.gain.exponentialRampToValueAtTime(MASTER_GAIN, ctx.currentTime + 1);
 
-    playChord();
-    // Chords overlap slightly so there is never a gap in the loop.
-    timer = setInterval(playChord, (CHORD_SECONDS - 0.5) * 1000);
+    beatIndex = 0;
+    playBeat();
+    // Scheduled on the beat, so the loop never drifts or gaps.
+    beatTimer = setInterval(playBeat, BEAT * 1000);
     return true;
   }
 
   function pause() {
     if (!playing || !ctx) return;
     playing = false;
-    clearInterval(timer);
-    timer = null;
+    clearInterval(beatTimer);
+    beatTimer = null;
     master.gain.cancelScheduledValues(ctx.currentTime);
     master.gain.setValueAtTime(master.gain.value, ctx.currentTime);
-    master.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 1.2);
+    master.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.8);
   }
 
   return {

@@ -76,16 +76,20 @@
 
       <div class="vision-banner">
         <svg class="vision-banner-waves" viewBox="0 0 1200 220" preserveAspectRatio="none" aria-hidden="true">
+          <path class="wave wave-0" fill="rgba(148, 152, 162, 0.09)"
+            d="M0,120 C300,60 500,180 800,120 C1100,60 1300,180 1600,120 C1900,60 2100,180 2400,120 L2400,220 L0,220 Z">
+            <animateTransform attributeName="transform" type="translate" from="0 0" to="-1200 0" dur="34s" repeatCount="indefinite" />
+          </path>
           <path class="wave wave-1" fill="rgba(148, 152, 162, 0.16)"
-            d="M0,150 C200,90 400,90 600,150 C800,210 1000,210 1200,150 C1400,90 1600,90 1800,150 C2000,210 2200,210 2400,150 L2400,220 L0,220 Z">
+            d="M0,150 C180,95 420,85 600,150 C780,215 1020,205 1200,150 C1380,95 1620,85 1800,150 C1980,215 2220,205 2400,150 L2400,220 L0,220 Z">
             <animateTransform attributeName="transform" type="translate" from="0 0" to="-1200 0" dur="30s" repeatCount="indefinite" />
           </path>
           <path class="wave wave-2" fill="rgba(148, 152, 162, 0.26)"
-            d="M0,170 C200,130 400,130 600,170 C800,210 1000,210 1200,170 C1400,130 1600,130 1800,170 C2000,210 2200,210 2400,170 L2400,220 L0,220 Z">
+            d="M0,172 C160,120 440,140 600,172 C760,204 1040,184 1200,172 C1360,120 1640,140 1800,172 C1960,204 2240,184 2400,172 L2400,220 L0,220 Z">
             <animateTransform attributeName="transform" type="translate" from="0 0" to="-1200 0" dur="19s" repeatCount="indefinite" />
           </path>
           <path class="wave wave-3" fill="rgba(148, 152, 162, 0.4)"
-            d="M0,185 C250,140 350,140 600,185 C850,230 950,230 1200,185 C1450,140 1550,140 1800,185 C2050,230 2150,230 2400,185 L2400,220 L0,220 Z">
+            d="M0,188 C220,145 380,150 600,188 C820,226 980,231 1200,188 C1420,145 1580,150 1800,188 C2020,226 2180,231 2400,188 L2400,220 L0,220 Z">
             <animateTransform attributeName="transform" type="translate" from="0 0" to="-1200 0" dur="13s" repeatCount="indefinite" />
           </path>
         </svg>
@@ -103,20 +107,8 @@
     </section>
   </main>
 
-  <footer class="site-footer">
-    <p>&copy; <span data-year></span> Bo Moldenhauer. All rights reserved.</p>
-
-    <button
-      class="music-toggle"
-      data-music-toggle
-      type="button"
-      aria-pressed="false"
-      aria-label="Play ambient background music"
-    >
-      <span class="music-bars" aria-hidden="true"><i></i><i></i><i></i></span>
-      <span data-music-label>Ambient off</span>
-    </button>
-  </footer>
+  <!-- Footer (copyright + ambient music toggle) is baked into the reveal video
+       overlay in src/connect/ConnectSection.jsx, not a standalone element here. -->
 
   <script type="module" src="/src/main.js"></script>
 </body>

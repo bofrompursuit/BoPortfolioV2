@@ -10,10 +10,6 @@ gsap.registerPlugin(ScrollTrigger);
 
 const VIDEO_SRC = "/assets/video/reveal-v2.mp4";
 
-// The link waits for the footage to finish. No fraction, no early reveal: the
-// reader watches the whole thing before being offered the way out. A video that
-// never starts is the one exception, guarded below.
-const NEVER_STARTED_MS = 6000;
 const TYPE_MS = 55; // per character
 
 // Rendered with white-space: pre-line, so each \n lands as its own centred
@@ -57,12 +53,12 @@ export default function ConnectSection() {
   const frameRef = useRef(null);
   const cardsRef = useRef(null);
   const [revealed, setRevealed] = useState(false);
-  // Playback has reached its reveal, so the frame dims and the link takes over.
-  const [settled, setSettled] = useState(false);
   const [typed, setTyped] = useState("");
   const [videoFailed, setVideoFailed] = useState(false);
 
-  // Playback: start when the stage scrolls into view, pause when it leaves.
+  // Playback: loops continuously (like the hero video), starts when the stage
+  // scrolls into view, pauses when it leaves. There is no "ended" state to wait
+  // on any more — the corner overlay is always there, footer-style.
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return undefined;
@@ -71,11 +67,7 @@ export default function ConnectSection() {
     video.muted = true;
     video.volume = 0;
 
-    const settle = () => setSettled(true);
-    const fail = () => {
-      setVideoFailed(true);
-      settle();
-    };
+    const fail = () => setVideoFailed(true);
 
     video.addEventListener("error", fail);
     // The source may fail before this effect runs, and some browsers never fire
@@ -85,15 +77,6 @@ export default function ConnectSection() {
     };
     checkSource();
     const sourceTimer = setTimeout(checkSource, 1500);
-
-    video.addEventListener("ended", settle);
-
-    // Only when playback never got going — blocked autoplay, a missing file, no
-    // H.264 — does the link appear without an "ended". Otherwise a visitor whose
-    // video cannot play is stuck with no way out.
-    const fallbackTimer = setTimeout(() => {
-      if (video.paused || video.error || video.currentTime === 0) settle();
-    }, NEVER_STARTED_MS);
 
     const trigger = ScrollTrigger.create({
       trigger: video,
@@ -107,29 +90,42 @@ export default function ConnectSection() {
 
     return () => {
       clearTimeout(sourceTimer);
-      clearTimeout(fallbackTimer);
       trigger.kill();
       video.removeEventListener("error", fail);
-      video.removeEventListener("ended", settle);
     };
   }, []);
 
-  // The frame unfurls as the section scrolls in.
+  // The frame unfurls as the section scrolls in, then the corner link types
+  // itself in — no longer gated on the video ending, since it now loops.
   useEffect(() => {
     if (!frameRef.current) return undefined;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (reduce) {
       gsap.set(frameRef.current, { opacity: 1, scale: 1 });
+      setTyped(CTA_TEXT);
       return undefined;
     }
 
+    let typingId;
+    const startTyping = () => {
+      let i = 0;
+      typingId = setInterval(() => {
+        i += 1;
+        setTyped(CTA_TEXT.slice(0, i));
+        if (i >= CTA_TEXT.length) clearInterval(typingId);
+      }, TYPE_MS);
+    };
+
     const tween = gsap.fromTo(
       frameRef.current,
-      { opacity: 0, scale: 0.82 },
+      { opacity: 0, scale: 0.94 },
       {
         opacity: 1,
         scale: 1,
         duration: 1.1,
         ease: "power3.out",
+        onStart: startTyping,
         scrollTrigger: { trigger: frameRef.current, start: "top 88%", once: true },
       }
     );
@@ -137,6 +133,7 @@ export default function ConnectSection() {
     return () => {
       tween.scrollTrigger?.kill();
       tween.kill();
+      clearInterval(typingId);
     };
   }, []);
 
@@ -151,24 +148,6 @@ export default function ConnectSection() {
     });
     return () => trigger.kill();
   }, []);
-
-  // Types the link in once the footage has finished.
-  useEffect(() => {
-    if (!settled) return undefined;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setTyped(CTA_TEXT);
-      return undefined;
-    }
-
-    let i = 0;
-    const id = setInterval(() => {
-      i += 1;
-      setTyped(CTA_TEXT.slice(0, i));
-      if (i >= CTA_TEXT.length) clearInterval(id);
-    }, TYPE_MS);
-
-    return () => clearInterval(id);
-  }, [settled]);
 
   useEffect(() => {
     if (!revealed || !cardsRef.current) return;
@@ -205,8 +184,11 @@ export default function ConnectSection() {
       </div>
 
       {/* Reveal footage, stitched straight onto the cards above. A square 1:1
-          crop that fills the available width, full-bleed like the hero video. */}
-      <div className="reveal-stage" ref={stageRef} data-settled={settled}>
+          crop on desktop that fills the available width, full-bleed like the
+          hero video; on 9:16 mobile it goes fullscreen (see .reveal-frame).
+          The footer (copyright + ambient toggle) is baked into this section's
+          bottom-right corner instead of living as a separate element. */}
+      <div className="reveal-stage" ref={stageRef}>
         <div className="reveal-frame" ref={frameRef} style={{ opacity: 0 }}>
           {videoFailed ? (
             <div className="reveal-fallback" aria-hidden="true" />
@@ -217,27 +199,46 @@ export default function ConnectSection() {
               src={VIDEO_SRC}
               autoPlay
               muted
+              loop
               playsInline
-              loop={false}
               preload="auto"
               aria-hidden="true"
             />
           )}
 
-          <div className="reveal-dim" aria-hidden="true" />
+          {/* Blends the crop into the page background and darkens the corner
+              behind the overlay text so it stays legible over bright footage. */}
+          <div className="reveal-vignette" aria-hidden="true" />
 
-          <button
-            type="button"
-            className="reveal-cta"
-            data-cursor-target
-            onClick={backToTop}
-            aria-label="Click here to go back to home"
-          >
-            <span className="reveal-cta-text" aria-hidden="true">
-              {typed}
-            </span>
-            <span className="reveal-cta-caret" aria-hidden="true" />
-          </button>
+          <div className="reveal-overlay">
+            <p className="reveal-copyright">
+              &copy; <span data-year></span> Bo Moldenhauer. All rights reserved.
+            </p>
+
+            <button
+              className="music-toggle"
+              data-music-toggle
+              type="button"
+              aria-pressed="false"
+              aria-label="Play ambient background music"
+            >
+              <span className="music-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span data-music-label>Ambient off</span>
+            </button>
+
+            <button
+              type="button"
+              className="reveal-cta"
+              data-cursor-target
+              onClick={backToTop}
+              aria-label="Click here to go back to home"
+            >
+              <span className="reveal-cta-text" aria-hidden="true">
+                {typed}
+              </span>
+              <span className="reveal-cta-caret" aria-hidden="true" />
+            </button>
+          </div>
         </div>
       </div>
 

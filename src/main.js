@@ -19,8 +19,6 @@ const prefersReducedMotion = window.matchMedia(
   "(prefers-reduced-motion: reduce)"
 ).matches;
 
-document.querySelector("[data-year]").textContent = new Date().getFullYear();
-
 /* ---------- Header background on scroll ---------- */
 const header = document.querySelector("[data-header]");
 ScrollTrigger.create({
@@ -128,6 +126,11 @@ if (showcaseRoot) mountShowcase(showcaseRoot);
 
 const connectRoot = document.getElementById("connect-root");
 if (connectRoot) mountConnect(connectRoot);
+
+// The footer (copyright + ambient toggle) is rendered by ConnectSection, so
+// [data-year] only exists in the DOM once mountConnect has run above.
+const yearEl = document.querySelector("[data-year]");
+if (yearEl) yearEl.textContent = new Date().getFullYear();
 
 /* ---------- Footer ambient music (synthesised, starts paused) ---------- */
 const musicToggle = document.querySelector("[data-music-toggle]");
