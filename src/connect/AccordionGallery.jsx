@@ -11,7 +11,12 @@ const COLLAPSED_STRIP = 76; // px of visible spine on a closed desktop panel
 const COLLAPSED_ROW = 88; // px of visible header on a closed mobile row
 
 function useIsDesktop() {
-  const query = "(min-width: 768px)";
+  // Width alone isn't enough: most phones in landscape are wider than 768px,
+  // which would hand them the tall, hover-driven desktop row layout on a
+  // viewport that's actually short and touch-only — the cause of the panels
+  // ballooning over the orb video below. Requiring height too keeps landscape
+  // phones on the compact stacked layout.
+  const query = "(min-width: 768px) and (min-height: 500px)";
   const [isDesktop, setIsDesktop] = useState(() => window.matchMedia(query).matches);
 
   useEffect(() => {

@@ -300,6 +300,7 @@ video {
 /* ---------- Reveal footage: full-bleed crop with a baked-in footer overlay ---------- */
 .reveal-stage {
   position: relative;
+  z-index: 1;
   display: flex;
   justify-content: center;
   overflow: hidden;
@@ -311,7 +312,9 @@ video {
 
 .reveal-frame {
   position: relative;
+  z-index: 1;
   width: 100%;
+  flex-shrink: 0;
   aspect-ratio: 1 / 1;
   overflow: hidden;
 }
@@ -327,12 +330,15 @@ video {
 
 /* Landscape phones: back to the safe, contained square. Without this a phone
    rotated sideways would carry the portrait rule's 100svh height straight
-   into landscape and spill the frame into the section below. */
+   into landscape and spill the frame into the section below. A min-height
+   floor keeps the orb video from ever clipping down to near-nothing on very
+   short landscape viewports. */
 @media (max-width: 900px) and (orientation: landscape) {
   .reveal-frame {
     width: 100%;
     aspect-ratio: 1 / 1;
     height: auto;
+    min-height: min(70vw, 320px);
     max-height: 100svh;
   }
 }

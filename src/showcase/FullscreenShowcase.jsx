@@ -98,22 +98,12 @@ export default function FullscreenShowcase({ category, startIndex = 0, onClose }
 
       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/70" />
 
-      {/* Header: category + close */}
-      <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-4 p-5 sm:p-8">
-        <div>
-          <p className="text-[0.7rem] uppercase tracking-[0.2em] text-white/60">
-            {category.title}
-          </p>
-          <p className="mt-1 text-sm text-white/45">{category.subtitle}</p>
-        </div>
-        <button
-          ref={closeRef}
-          onClick={onClose}
-          aria-label="Close showcase"
-          className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white backdrop-blur-md transition hover:bg-white/20"
-        >
-          Close
-        </button>
+      {/* Header: category, centered */}
+      <div className="absolute inset-x-0 top-0 p-5 text-center sm:p-8">
+        <p className="mx-auto text-[0.7rem] uppercase tracking-[0.2em] text-white/60">
+          {category.title}
+        </p>
+        <p className="mx-auto mt-1 text-sm text-white/45">{category.subtitle}</p>
       </div>
 
       {/* Active project details, above the centered thumbnail strip */}
@@ -212,6 +202,15 @@ export default function FullscreenShowcase({ category, startIndex = 0, onClose }
             →
           </button>
         </div>
+
+        <button
+          ref={closeRef}
+          onClick={onClose}
+          aria-label="Close showcase"
+          className="rounded-full border border-white/15 bg-white/10 px-6 py-2.5 text-sm text-white backdrop-blur-md transition hover:bg-white/20"
+        >
+          Close
+        </button>
       </div>
     </motion.div>,
     document.body
