@@ -1,11 +1,8 @@
 /**
  * Card copy is inferred from project names — review and replace with the real
- * descriptions. Image IDs are Unsplash placeholders; each item also carries a
- * `gradient` used as a fallback layer if the remote image fails to load.
+ * descriptions. Images are local files under public/assets/img/; each item
+ * also carries a `gradient` used as a fallback layer if an image fails to load.
  */
-
-const unsplash = (id) =>
-  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=2000&q=80`;
 
 export const categories = [
   {
@@ -19,7 +16,7 @@ export const categories = [
         title: "AdCraft+",
         url: "https://adcraft-ai-studio-7225.bolt.host",
         category: "B2B Builds",
-        image: unsplash("1550859492-d5da9d8e45f3"),
+        image: "/assets/img/b2b-adcraft.jpg",
         gradient: "linear-gradient(135deg, #4c1d95, #0a0a0c 70%)",
         detail:
           "AI ad-creative studio for generating, iterating on and exporting campaign-ready ad variations.",
@@ -28,7 +25,7 @@ export const categories = [
         title: "RAIVALRY",
         url: "https://rivalry-insight-engine.lovable.app/",
         category: "B2B Builds",
-        image: unsplash("1451187580459-43490279c0fa"),
+        image: "/assets/img/b2b-raivalry.jpg",
         gradient: "linear-gradient(135deg, #0f3460, #0a0a0c 70%)",
         detail:
           "Competitive-intelligence engine that benchmarks rival brands and surfaces positioning gaps.",
@@ -37,7 +34,7 @@ export const categories = [
         title: "justif.AI",
         url: "https://viral-snare-18430086.figma.site",
         category: "B2B Builds",
-        image: unsplash("1462331940025-496dfbfc7564"),
+        image: "/assets/img/b2b-justifai.jpg",
         gradient: "linear-gradient(135deg, #1e3a8a, #0a0a0c 70%)",
         detail:
           "Decision-support tool that assembles evidence-backed justifications for campaign spend.",
@@ -46,7 +43,7 @@ export const categories = [
         title: "SOCIAL STUDIO",
         url: "https://canonical-store-production.weweb.io/",
         category: "B2B Builds",
-        image: unsplash("1557682224-5b8590cd9ec5"),
+        image: "/assets/img/b2b-social-studio.jpg",
         gradient: "linear-gradient(135deg, #831843, #0a0a0c 70%)",
         detail:
           "Centralized production and scheduling workspace for brand social content.",
@@ -55,7 +52,7 @@ export const categories = [
         title: "Assetify",
         url: "https://serene-clad-90305952.figma.site",
         category: "B2B Builds",
-        image: unsplash("1518709268805-4e9042af2176"),
+        image: "/assets/img/b2b-assetify.jpg",
         gradient: "linear-gradient(135deg, #164e63, #0a0a0c 70%)",
         detail:
           "Brand asset library that keeps approved creative organized, searchable and on-spec.",
@@ -122,7 +119,7 @@ export const categories = [
         title: "Fanzone: Unlocked",
         url: "https://unlocked-zeta.vercel.app/",
         category: 'Bo in Colla"BO"ration',
-        image: unsplash("1465101162946-4377e57745c3"),
+        image: "/assets/img/collab-fanzone-unlocked.jpg",
         gradient: "linear-gradient(135deg, #581c87, #0a0a0c 70%)",
         detail: "Vercel · React · Figma",
       },
@@ -130,7 +127,7 @@ export const categories = [
         title: "Meet me in time",
         url: "https://stony-import-17203635.figma.site",
         category: 'Bo in Colla"BO"ration',
-        image: unsplash("1493246507139-91e8fad9978e"),
+        image: "/assets/img/collab-meet-me-in-time.jpg",
         gradient: "linear-gradient(135deg, #155e75, #0a0a0c 70%)",
         detail: "Figma Sites · Framer Motion",
       },
@@ -138,7 +135,7 @@ export const categories = [
         title: "Choose Your Adventure NYC",
         url: "https://wake-bush-18609568.figma.site",
         category: 'Bo in Colla"BO"ration',
-        image: unsplash("1502134249126-9f3755a50d78"),
+        image: "/assets/img/collab-choose-your-adventure-nyc.jpg",
         gradient: "linear-gradient(135deg, #1e1b4b, #0a0a0c 70%)",
         detail: "Figma Sites · Mapbox · Branching narrative",
       },
@@ -146,7 +143,7 @@ export const categories = [
         title: "Last Onboarder",
         url: "https://lastonboarder.lovable.app",
         category: 'Bo in Colla"BO"ration',
-        image: unsplash("1504639725590-34d0984388bd"),
+        image: "/assets/img/collab-last-onboarder.jpg",
         gradient: "linear-gradient(135deg, #9d174d, #0a0a0c 70%)",
         detail: "Lovable · Supabase · React",
       },
@@ -154,7 +151,7 @@ export const categories = [
         title: "Amplif/AI Block Party App",
         url: "https://envoy-groove-15308077.figma.site",
         category: 'Bo in Colla"BO"ration',
-        image: unsplash("1492684223066-81342ee5ff30"),
+        image: "/assets/img/collab-amplifai-block-party.jpg",
         gradient: "linear-gradient(135deg, #b45309, #0a0a0c 70%)",
         detail: "Figma Sites · AI APIs · Event tooling",
       },
