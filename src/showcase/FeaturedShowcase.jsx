@@ -12,11 +12,11 @@ export default function FeaturedShowcase() {
     <>
       <div className="px-[clamp(20px,5vw,56px)] pt-[clamp(40px,6vh,76px)]">
         <h2 className="text-[clamp(1.8rem,4vw,2.75rem)] font-semibold tracking-tight text-white">
-          Featured Systems &amp; Code
+          Tech Lookbook + Services
         </h2>
         <p className="mt-3 max-w-2xl text-white/50">
-          Selected engineering projects demonstrating end-to-end system design, clean
-          architecture, and practical problem-solving.
+          Building automated workflows and smart AI tools that optimize finance
+          workflows, eliminate operational bottlenecks, and help teams grow together.
         </p>
       </div>
 

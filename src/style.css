@@ -297,70 +297,6 @@ video {
   50% { height: 12px; }
 }
 
-/* ---------- Operational Vision & Mission / Technical DNA + Services: wave
-   banner sub-bands of Work, stacked back to back into Stay in touch ---------- */
-.vision-banner {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  min-height: clamp(130px, 20vh, 210px);
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  background: linear-gradient(180deg, #0a0a0c 0%, #0d0e15 100%);
-}
-
-.vision-banner-waves {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
-  /* Fades the crests to nothing at the top and bottom instead of ending on a
-     hard rectangular edge, so the graphic dissolves into the section rather
-     than reading as a bordered panel. */
-  mask-image: linear-gradient(to bottom, transparent 0%, black 22%, black 88%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 22%, black 88%, transparent 100%);
-}
-
-.vision-banner-waves path {
-  /* Softens every vector edge into something closer to sheer, drifting fabric
-     than a crisp illustrated line. */
-  filter: blur(2.5px);
-}
-
-/* Operational Vision & Mission: plain strip, no wave graphic, so the two
-   banners don't stack two wave backgrounds back to back. */
-.vision-banner--plain {
-  background: var(--bg);
-}
-
-.vision-banner-copy {
-  position: relative;
-  z-index: 1;
-  max-width: 720px;
-  text-align: right;
-  padding: clamp(14px, 2.4vh, 22px) clamp(20px, 5vw, 56px);
-}
-
-.vision-banner-copy h3 {
-  margin: 0;
-  font-size: clamp(1.6rem, 4vw, 2.5rem);
-  font-weight: 600;
-  line-height: 1.15;
-  letter-spacing: -0.01em;
-  color: #fff;
-}
-
-.vision-banner-copy p {
-  margin: 6px 0 0;
-  max-width: 46ch;
-  margin-left: auto;
-  line-height: 1.2;
-  color: rgba(255, 255, 255, 0.72);
-  font-size: clamp(0.85rem, 1.6vw, 1rem);
-}
-
 /* ---------- Reveal footage: full-bleed crop with a baked-in footer overlay ---------- */
 .reveal-stage {
   position: relative;
@@ -425,6 +361,23 @@ video {
     radial-gradient(ellipse 78% 78% at 50% 50%, transparent 55%, var(--bg) 100%);
 }
 
+/* Tagline, bottom-left — mirrors the control stack on the right so the
+   footer reads as brand-left, controls-right like a normal site footer.
+   Same treatment as .eyebrow, the site's other subheadline. */
+.reveal-tagline {
+  position: absolute;
+  z-index: 2;
+  left: max(clamp(16px, 4vw, 40px), env(safe-area-inset-left));
+  bottom: max(clamp(16px, 4vh, 40px), env(safe-area-inset-bottom));
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--muted);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
 /* Footer, baked into the video: copyright, ambient toggle and the "go home"
    link stacked in the bottom-right corner, all right-justified. */
 .reveal-overlay {
@@ -449,23 +402,24 @@ video {
 
 .reveal-cta {
   display: inline-flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 2px;
+  align-items: baseline;
+  gap: 1px;
   appearance: none;
   border: 0;
   background: none;
   font: inherit;
-  text-align: right;
-  /* Monospaced so the characters do not reflow as they are typed in. */
+  /* Monospaced so "[ home//" and the trailing "]" never reflow around the
+     caret between them. */
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: clamp(0.85rem, 2vw, 1.15rem);
+  font-size: clamp(0.9rem, 2.2vw, 1.25rem);
   font-weight: 300;
   letter-spacing: 0.16em;
   line-height: 1;
   cursor: pointer;
   padding: 6px 2px;
   min-height: 44px;
+  transform: scale(1);
+  transition: transform 0.25s ease, letter-spacing 0.25s ease, opacity 0.25s ease;
 }
 
 /* Holographic: a cyan-to-magenta sheen drifting through white, clipped to the
@@ -487,10 +441,7 @@ video {
   animation: revealHolo 6s linear infinite;
   filter: drop-shadow(0 0 6px rgba(160, 235, 255, 0.55))
     drop-shadow(0 0 16px rgba(255, 255, 255, 0.3));
-  /* Each \n in CTA_TEXT becomes its own right-aligned, tight-leaded line as
-     the characters type in. */
-  white-space: pre-line;
-  text-align: right;
+  white-space: pre;
   line-height: 1;
 }
 
@@ -516,6 +467,7 @@ video {
 
 .reveal-cta:hover,
 .reveal-cta:focus-visible {
+  transform: scale(1.08);
   letter-spacing: 0.22em;
   outline: none;
 }
@@ -528,6 +480,15 @@ video {
   .reveal-cta-text,
   .reveal-cta-caret {
     animation: none;
+  }
+
+  .reveal-cta {
+    transition: none;
+  }
+
+  .reveal-cta:hover,
+  .reveal-cta:focus-visible {
+    transform: none;
   }
 
   /* Without the sheen animation the clipped gradient would sit on one static

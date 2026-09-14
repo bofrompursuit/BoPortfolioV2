@@ -8,18 +8,17 @@ import { STATUES } from "./marble";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const VIDEO_SRC = "/assets/video/reveal-v2.mp4";
+const VIDEO_SRC = "/assets/video/orb.mp4";
 // Synthesised offline (see scripts used to generate it) into a WAV whose
 // oscillators complete a whole number of cycles across the 16s loop, so it
 // tiles with zero click at the seam — no external track, no licensing to
 // track down.
 const AMBIENT_AUDIO_SRC = "/assets/audio/ambient-synth-loop.wav";
 
-const TYPE_MS = 55; // per character
-
-// Rendered with white-space: pre-line, so each \n lands as its own centred
-// line as the characters type in.
-const CTA_TEXT = "click\nhere\nto\ngo\nback\nto\nHOME//";
+// Split so the blinking caret can sit right after "//" and before the
+// closing bracket, rather than at the very end of the whole label.
+const CTA_LABEL_PREFIX = "[ home//";
+const CTA_LABEL_SUFFIX = " ]";
 
 const PANELS = [
   {
@@ -59,7 +58,6 @@ export default function ConnectSection() {
   const cardsRef = useRef(null);
   const audioRef = useRef(null);
   const [revealed, setRevealed] = useState(false);
-  const [typed, setTyped] = useState("");
   const [videoFailed, setVideoFailed] = useState(false);
   const [musicPlaying, setMusicPlaying] = useState(false);
 
@@ -121,27 +119,13 @@ export default function ConnectSection() {
     };
   }, []);
 
-  // The frame unfurls as the section scrolls in, then the corner link types
-  // itself in — no longer gated on the video ending, since it now loops.
+  // The frame unfurls as the section scrolls in.
   useEffect(() => {
     if (!frameRef.current) return undefined;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    if (reduce) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       gsap.set(frameRef.current, { opacity: 1, scale: 1 });
-      setTyped(CTA_TEXT);
       return undefined;
     }
-
-    let typingId;
-    const startTyping = () => {
-      let i = 0;
-      typingId = setInterval(() => {
-        i += 1;
-        setTyped(CTA_TEXT.slice(0, i));
-        if (i >= CTA_TEXT.length) clearInterval(typingId);
-      }, TYPE_MS);
-    };
 
     const tween = gsap.fromTo(
       frameRef.current,
@@ -151,7 +135,6 @@ export default function ConnectSection() {
         scale: 1,
         duration: 1.1,
         ease: "power3.out",
-        onStart: startTyping,
         scrollTrigger: { trigger: frameRef.current, start: "top 88%", once: true },
       }
     );
@@ -159,7 +142,6 @@ export default function ConnectSection() {
     return () => {
       tween.scrollTrigger?.kill();
       tween.kill();
-      clearInterval(typingId);
     };
   }, []);
 
@@ -196,7 +178,8 @@ export default function ConnectSection() {
           Stay in touch
         </h2>
         <p className="mt-3 max-w-2xl text-white/55">
-          Three ways to reach me &mdash; start a project, back the work, or follow along.
+          I lead with problem solving then architect solutions wrapped with cutting-edge
+          tech. Feel free to ask.
         </p>
       </div>
 
@@ -236,18 +219,27 @@ export default function ConnectSection() {
               behind the overlay text so it stays legible over bright footage. */}
           <div className="reveal-vignette" aria-hidden="true" />
 
+          <p className="reveal-tagline">
+            Intelligent tech.
+            <br />
+            Serious impact.
+          </p>
+
           <div className="reveal-overlay">
             <button
               type="button"
               className="reveal-cta"
               data-cursor-target
               onClick={backToTop}
-              aria-label="Click here to go back to home"
+              aria-label="Home"
             >
               <span className="reveal-cta-text" aria-hidden="true">
-                {typed}
+                {CTA_LABEL_PREFIX}
               </span>
               <span className="reveal-cta-caret" aria-hidden="true" />
+              <span className="reveal-cta-text" aria-hidden="true">
+                {CTA_LABEL_SUFFIX}
+              </span>
             </button>
 
             <audio ref={audioRef} src={AMBIENT_AUDIO_SRC} loop preload="none" />
