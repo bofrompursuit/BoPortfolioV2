@@ -5,7 +5,6 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { mountShowcase } from "./showcase/mount.jsx";
 import { mountConnect } from "./connect/mount.jsx";
-import { createFooterMusic } from "./footerMusic.js";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -127,25 +126,5 @@ if (showcaseRoot) mountShowcase(showcaseRoot);
 const connectRoot = document.getElementById("connect-root");
 if (connectRoot) mountConnect(connectRoot);
 
-// The footer (copyright + ambient toggle) is rendered by ConnectSection, so
-// [data-year] only exists in the DOM once mountConnect has run above.
-const yearEl = document.querySelector("[data-year]");
-if (yearEl) yearEl.textContent = new Date().getFullYear();
-
-/* ---------- Footer ambient music (synthesised, starts paused) ---------- */
-const musicToggle = document.querySelector("[data-music-toggle]");
-if (musicToggle) {
-  const music = createFooterMusic();
-  const label = musicToggle.querySelector("[data-music-label]");
-
-  musicToggle.addEventListener("click", async () => {
-    const nowPlaying = await music.toggle();
-    musicToggle.classList.toggle("is-playing", nowPlaying);
-    musicToggle.setAttribute("aria-pressed", String(nowPlaying));
-    musicToggle.setAttribute(
-      "aria-label",
-      nowPlaying ? "Mute ambient background music" : "Play ambient background music"
-    );
-    if (label) label.textContent = nowPlaying ? "Ambient on" : "Ambient off";
-  });
-}
+// The footer (copyright, ambient audio toggle, "go home" link) is rendered
+// and fully wired inside ConnectSection itself — nothing left to do here.

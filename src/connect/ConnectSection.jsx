@@ -9,6 +9,11 @@ import { STATUES } from "./marble";
 gsap.registerPlugin(ScrollTrigger);
 
 const VIDEO_SRC = "/assets/video/reveal-v2.mp4";
+// Synthesised offline (see scripts used to generate it) into a WAV whose
+// oscillators complete a whole number of cycles across the 16s loop, so it
+// tiles with zero click at the seam — no external track, no licensing to
+// track down.
+const AMBIENT_AUDIO_SRC = "/assets/audio/ambient-synth-loop.wav";
 
 const TYPE_MS = 55; // per character
 
@@ -52,9 +57,30 @@ export default function ConnectSection() {
   const stageRef = useRef(null);
   const frameRef = useRef(null);
   const cardsRef = useRef(null);
+  const audioRef = useRef(null);
   const [revealed, setRevealed] = useState(false);
   const [typed, setTyped] = useState("");
   const [videoFailed, setVideoFailed] = useState(false);
+  const [musicPlaying, setMusicPlaying] = useState(false);
+
+  async function toggleMusic() {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (musicPlaying) {
+      audio.pause();
+      setMusicPlaying(false);
+      return;
+    }
+
+    try {
+      await audio.play();
+      setMusicPlaying(true);
+    } catch {
+      // Autoplay/gesture policies blocked it; stay in the "off" state rather
+      // than claim it's playing when it isn't.
+    }
+  }
 
   // Playback: loops continuously (like the hero video), starts when the stage
   // scrolls into view, pauses when it leaves. There is no "ended" state to wait
@@ -211,21 +237,6 @@ export default function ConnectSection() {
           <div className="reveal-vignette" aria-hidden="true" />
 
           <div className="reveal-overlay">
-            <p className="reveal-copyright">
-              &copy; <span data-year></span> Bo Moldenhauer. All rights reserved.
-            </p>
-
-            <button
-              className="music-toggle"
-              data-music-toggle
-              type="button"
-              aria-pressed="false"
-              aria-label="Play ambient background music"
-            >
-              <span className="music-bars" aria-hidden="true"><i></i><i></i><i></i></span>
-              <span data-music-label>Ambient off</span>
-            </button>
-
             <button
               type="button"
               className="reveal-cta"
@@ -238,6 +249,22 @@ export default function ConnectSection() {
               </span>
               <span className="reveal-cta-caret" aria-hidden="true" />
             </button>
+
+            <audio ref={audioRef} src={AMBIENT_AUDIO_SRC} loop preload="none" />
+            <button
+              type="button"
+              className={`music-toggle${musicPlaying ? " is-playing" : ""}`}
+              onClick={toggleMusic}
+              aria-pressed={musicPlaying}
+              aria-label={musicPlaying ? "Mute ambient background music" : "Play ambient background music"}
+            >
+              <span className="music-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span>{musicPlaying ? "Ambient on" : "Ambient off"}</span>
+            </button>
+
+            <p className="reveal-copyright">
+              &copy; {new Date().getFullYear()} Bo Moldenhauer. All rights reserved.
+            </p>
           </div>
         </div>
       </div>
